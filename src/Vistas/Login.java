@@ -85,9 +85,13 @@ public class Login {
 				rol=tipoUsuario(nombre,password);
 				boolean uno = login(nombre,password);
 				if(uno==true&&rol.equals("Administrador")){
-					JOptionPane.showMessageDialog(null, "Bienvendo al sistema");
+					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
 					ventanaLogin.dispose();
 					menuAdministrador();
+				}else if(uno==true&&rol.equals("Operador")){
+					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
+					ventanaLogin.dispose();
+					menuOperador();
 				}else{
 					JOptionPane.showMessageDialog(null, "Verifique sus credenciales");
 				}
@@ -365,6 +369,84 @@ public class Login {
 		dialogUsuario.setVisible(true);
 		dialogUsuario.setLocationRelativeTo(null);
 	
+	}
+	public void menuOperador(){
+		JButton registro,ventas,pago,consulta,salir;
+		JDialog dialog = new JDialog();
+		JPanel panelIzquierdo = new JPanel();
+		panelIzquierdo.setLayout(new GridLayout(2,2,3,3));
+		JPanel panelDerecho = new JPanel();
+		panelDerecho.setLayout(new GridLayout(2,2,3,3));
+		JPanel panelAbajo = new JPanel();
+		JPanel arriba = new JPanel();
+		JLabel label2 = new JLabel("Panel de Operador");
+		label2.setFont(new Font("Tahoma",0,35));
+		arriba.add(label2);
+		registro = new JButton("Registro de Usuarios");
+		registro.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				menuControlUsuarios();
+			}
+			
+		});
+		ventas = new JButton("Ventas");
+		ventas.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		pago = new JButton("Pagos");
+		pago.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		consulta = new JButton("Consultas");
+		consulta.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				logaut(dialog);
+			}
+			
+		});
+		salir = new JButton("Salir");
+		salir.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				logaut(dialog);
+			}
+			
+		});
+		panelAbajo.setPreferredSize(new Dimension(55,0));
+		panelIzquierdo.add(registro);
+		panelDerecho.add(ventas);
+		panelIzquierdo.setPreferredSize(new Dimension(300,0));
+		panelDerecho.setPreferredSize(new Dimension(300,0));
+		panelIzquierdo.add(pago);
+		panelDerecho.add(consulta);
+		arriba.add(salir);
+		arriba.setPreferredSize(new Dimension(0,100));
+		dialog.add(arriba, BorderLayout.NORTH);
+		dialog.add(panelIzquierdo,BorderLayout.WEST);
+		dialog.add(panelDerecho,BorderLayout.EAST);
+		dialog.add(panelAbajo, BorderLayout.SOUTH);
+		dialog.setLocationRelativeTo(null);
+		panelDerecho.setBackground(Color.WHITE);
+		panelIzquierdo.setBackground(Color.WHITE);
+		arriba.setBackground(Color.WHITE);
+		dialog.setSize(620,620);;
+		dialog.setVisible(true);
+		dialog.setLocationRelativeTo(null);
 	}
 	public void cargaMasiva(){
 		JPanel arriba = new JPanel();
