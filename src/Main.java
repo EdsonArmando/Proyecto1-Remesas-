@@ -4,6 +4,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.awt.event.*;
 
@@ -15,14 +19,11 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import Modelos.Usuario;
 import Vistas.Login;
 public class Main{
-	Scanner sc = new Scanner(System.in);
-	JFrame inicio;
-	JButton login;
-	JPanel panel1;
-	JLabel titulo;
 	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);		
 		Main ma = new Main();
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -42,6 +43,11 @@ public class Main{
 		ma.inicio();
 	}
 	public void inicio() {
+		Login log = new Login();
+		JFrame inicio;
+		JButton login;
+		JPanel panel1;
+		JLabel titulo;
 		panel1 = new JPanel();
 		titulo = new JLabel("Envio de remesas");
 		titulo.setFont(new Font("Tahoma",0,35));
@@ -56,11 +62,11 @@ public class Main{
 		panel1.add(titulo);
 		panel1.add(login);
 		login.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Login log = new Login();
 				log.formulario();
+				log.crearUsuario("Edson","Administrador","201701029","123",null);
 			}
 			
 		});
@@ -68,5 +74,4 @@ public class Main{
 		inicio.setVisible(true);
 		inicio.setLocationRelativeTo(null);
 	}
-
 }
