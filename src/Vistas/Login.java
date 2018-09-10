@@ -3,6 +3,7 @@ package Vistas;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Modelos.Usuario;
@@ -77,11 +79,12 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nombre,password;
+				String nombre,password,rol;
 				nombre = user.getText();
 				password = contra.getText();
+				rol=tipoUsuario(nombre,password);
 				boolean uno = login(nombre,password);
-				if(uno==true){
+				if(uno==true&&rol.equals("Administrador")){
 					JOptionPane.showMessageDialog(null, "Bienvendo al sistema");
 					ventanaLogin.dispose();
 					menuAdministrador();
@@ -125,7 +128,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				formularioCrearUsuario();
+				menuControlUsuarios();
 			}
 			
 		});
@@ -151,9 +154,9 @@ public class Login {
 		});
 		salir = new JButton("Logaut");
 		salir.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				logaut(dialog);
 			}
 			
 		});
@@ -177,25 +180,85 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
+	public void menuControlUsuarios(){
+		JButton altas,bajas,aprobar;
+		JDialog dialog = new JDialog();
+		JPanel panelIzquierdo = new JPanel();
+		panelIzquierdo.setLayout(new GridLayout(2,2,3,3));
+		JPanel panelDerecho = new JPanel();
+		panelDerecho.setLayout(new GridLayout(2,2,3,3));
+		JPanel panelAbajo = new JPanel();
+		JPanel arriba = new JPanel();
+		JLabel label2 = new JLabel("ControlUsuario");
+		label2.setFont(new Font("Tahoma",0,35));
+		arriba.add(label2);
+		altas = new JButton("Crear Usuario");
+		altas.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				formularioCrearUsuario();
+			}
+			
+		});
+		bajas = new JButton("EliminarUsuario");
+		bajas.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		aprobar = new JButton("Aprobar Usuario");
+		aprobar.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		panelAbajo.setPreferredSize(new Dimension(55,0));
+		panelIzquierdo.add(altas);
+		panelIzquierdo.setPreferredSize(new Dimension(250,0));
+		panelDerecho.setPreferredSize(new Dimension(250,0));
+		panelIzquierdo.add(bajas);
+		panelDerecho.add(aprobar);
+		arriba.setPreferredSize(new Dimension(0,100));
+		dialog.add(arriba, BorderLayout.NORTH);
+		dialog.add(panelIzquierdo,BorderLayout.WEST);
+		dialog.add(panelDerecho,BorderLayout.EAST);
+		dialog.add(panelAbajo, BorderLayout.SOUTH);
+		dialog.setLocationRelativeTo(null);
+		panelDerecho.setBackground(Color.WHITE);
+		panelIzquierdo.setBackground(Color.WHITE);
+		arriba.setBackground(Color.WHITE);
+		dialog.setSize(520,520);;
+		dialog.setVisible(true);
+		dialog.setLocationRelativeTo(null);
+	}
 	public void formularioCrearUsuario(){
 		JPasswordField  contraseña,verificas;
-		JTextField ids,nombres,apellidos,userss,rols,passwordsa;
+		JTextField ids,nombres,fecha,userss,rols,passwordsa;
 		JComboBox roles,rolse2;
 		JPanel arriba = new JPanel();
 		JLabel verificars;
 		JPasswordField verificar;
 		JDialog dialogUsuario = new JDialog();
-		JButton agregar,cancelar;
+		JButton agregar,cancelar,cargaMasiva;
 		JPanel panelUsuario = new JPanel();
 		panelUsuario.setLayout(null);
-		JLabel idss,nombress,apellidoss,users,rolss,contraseñas;
+		JLabel idss,nombress,fechas,users,rolss,contraseñas;
 		JPasswordField passwords;
 		idss = new JLabel("CUI: ");
 		idss.setBounds(10,20,80,20);
 		nombress = new JLabel("Nombre:");
 		nombress.setBounds(10,50,95,20);
-		apellidoss = new JLabel("Apellido: ");
-		apellidoss.setBounds(10,80,95,20);
+		fechas = new JLabel("Fecha: ");
+		fechas.setBounds(10,80,95,20);
 		users = new JLabel("Usuario: ");
 		users.setBounds(10,110,95,20);
 		rolss = new JLabel("Rol: ");
@@ -208,13 +271,13 @@ public class Login {
 		ids.setBounds(105,20,80,20);
 		nombres = new JTextField();
 		nombres.setBounds(105, 50, 80, 20);
-		apellidos = new JTextField();
-		apellidos.setBounds(105,80,80,20);
+		fecha = new JTextField();
+		fecha.setBounds(105,80,80,20);
 		userss = new JTextField();
 		userss.setBounds(105,110,80,20);
 		roles = new JComboBox();
-		roles.addItem("usuario");
-		roles.addItem("administrador");
+		roles.addItem("Operador");
+		roles.addItem("Cliente");
 		roles.setBounds(105,140,80,20);
 		contraseña = new JPasswordField();
 		contraseña.setBounds(105,170,80,20);
@@ -225,10 +288,10 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id,nombre,apellido,rol,user,password;
+				String id,nombre,fech,rol,user,password;
 				id = ids.getText();
 				nombre = nombres.getText();
-				apellido = apellidos.getText();
+				fech = fecha.getText();
 				rol = String.valueOf(roles.getSelectedItem());
 				user = userss.getText();
 			}
@@ -244,25 +307,55 @@ public class Login {
 			}
 			
 		});
+		cargaMasiva = new JButton("Carga Masiva");
+		cargaMasiva.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cargaMasiva();
+			}
+			
+		});
+		roles.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(roles.getSelectedItem().equals("Cliente")){
+					fecha.setEnabled(false);
+					fecha.setText("");
+					userss.setEnabled(false);
+					userss.setText("");
+				}
+				if(roles.getSelectedItem().equals("Operador")){
+					fecha.setEnabled(true);
+					fecha.setText("");
+					userss.setEnabled(true);
+					userss.setText("");
+				}
+			}
+			
+		});
 		JLabel label2 = new JLabel("Formulario de Usuarios");
 	    label2.setFont(new Font("Tahoma",0,35));
 	    arriba.add(label2);
 	    dialogUsuario.add(arriba, BorderLayout.NORTH);
 		agregar.setBounds(105, 230, 80, 20);
 		cancelar.setBounds(205, 230, 80, 20);
+		cargaMasiva.setBounds(305, 230, 80, 20);
 		panelUsuario.add(idss);
 		panelUsuario.add(cancelar);
 		panelUsuario.add(nombres);
-		panelUsuario.add(apellidoss);
+		panelUsuario.add(fecha);
 		panelUsuario.add(userss);
 		panelUsuario.add(rolss);
 		panelUsuario.add(verificars);
 		panelUsuario.add(agregar);
+		panelUsuario.add(cargaMasiva);
 		panelUsuario.add(contraseña);
 		panelUsuario.add(contraseñas);
 		panelUsuario.add(nombress);
 		panelUsuario.add(verificar);
-		panelUsuario.add(apellidos);
+		panelUsuario.add(fechas);
 		panelUsuario.add(users);
 		panelUsuario.add(roles);
 		panelUsuario.add(ids);
@@ -272,6 +365,65 @@ public class Login {
 		dialogUsuario.setVisible(true);
 		dialogUsuario.setLocationRelativeTo(null);
 	
+	}
+	public void cargaMasiva(){
+		JPanel arriba = new JPanel();
+		try{
+			JButton aceptar;
+			JDialog dg = new JDialog();
+			JPanel panel = new JPanel(new FlowLayout());
+			JLabel tipos;
+			JTextArea text=new JTextArea(15,40);
+			text.setText("Nombre:"+"Edson Guix"+"Contraseña:"+"123"+"Pasaporte:"+"123456789");
+			panel.add(text,BorderLayout.CENTER);
+			panel.add(aceptar = new JButton("Aceptar"),BorderLayout.WEST);
+			aceptar.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String tipos,autors,titulos,edicions,
+					palabrasClaves,descripcions,temass,noCopiass,noDisponibles,frecuenciaActuals,ejemplaress,areass;
+						String uno =text.getText();
+						String[] parts = uno.split(";");
+						System.out.println(parts.length);
+						if(parts[0].equals("0")){
+							parts[0]="Libro";
+							System.out.println(parts[0]);
+						}
+						if(parts[0].equals("1")){
+							parts[0]="Revista";
+						}
+						if(parts[0].equals("2")){
+							parts[0]="Tesis";
+						}
+						tipos = parts[0];
+						autors = parts[1];
+						titulos = parts[2];
+						edicions = parts[3];
+						palabrasClaves = parts[4];
+						descripcions = parts[5];
+						temass = parts[6];
+						noCopiass = parts[7];
+						noDisponibles = parts[8];
+						frecuenciaActuals = parts[9];
+						ejemplaress = parts[10];
+						areass = parts[11];		
+				}
+				
+			});
+			dg.add(panel);
+			JLabel label2 = new JLabel("Carga Masiva de Usuarios");
+		    label2.setFont(new Font("Tahoma",0,35));
+		    arriba.add(label2);
+		    dg.add(arriba, BorderLayout.NORTH);
+			dg.setVisible(true);
+			dg.setSize(800,400);
+			dg.setLocationRelativeTo(null);
+		}catch(NumberFormatException gf){
+			JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña");
+		}
+	}
+	public void logaut(JDialog ventana){
+		ventana.dispose();
 	}
 	public void recorrerLista(){
 		for(int i=0;i<cont;i++){
@@ -286,6 +438,15 @@ public class Login {
 			}
 		}
 		return acceso;
+	}
+	public String tipoUsuario(String nombre, String password){
+		String rol=null;
+		for(int i=0;i<cont;i++){
+			if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
+				rol = usuarioList[i].getRol();
+			}
+		}
+		return rol;
 	}
 	
 }
