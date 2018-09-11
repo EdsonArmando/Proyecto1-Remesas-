@@ -66,9 +66,7 @@ public class Main{
 			public void actionPerformed(ActionEvent e) {
 				Login log = new Login();
 				log.formulario();
-				log.crearUsuario("Edson","Administrador","201701029","123",null);
-				log.crearUsuario("Arma","Operador","201701029","125",null);
-				log.crearUsuario("Lucia","Administrador","201701029","126",null);
+				log.recorrerLista();
 			}
 			
 		});

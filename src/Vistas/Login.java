@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -24,27 +26,11 @@ import javax.swing.JTextField;
 import Modelos.Usuario;
 
 public class Login {
-	int cont =0;
+	int cont =1;
 	Scanner sc = new Scanner(System.in);
 	Usuario[] usuarioList = new Usuario[50];
-	
-	public void crearUsuario(String nombre, String rol, String identificador, String password, Date fechaInicio) {
-		boolean dos = false;
-		for(int i=0;i<cont;i++){
-			if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
-				dos=true;
-			}else{
-				dos=false;
-			}
-		}
-		if(dos == true){
-			JOptionPane.showMessageDialog(null, "Este usuario ya existe");
-		}else if(dos == false){
-			usuarioList[cont]=new Usuario(nombre,rol,identificador,password,fechaInicio);
-			cont++;
-		}
-	}
 	public void formulario() {
+		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null);
 		JPanel login;
 		JDialog ventanaLogin;
 		JLabel usuario,contraseña;
@@ -86,12 +72,20 @@ public class Login {
 				boolean uno = login(nombre,password);
 				if(uno==true&&rol.equals("Administrador")){
 					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
-					ventanaLogin.dispose();
 					menuAdministrador();
+					user.setText("");
+					contra.setText("");
+					recorrerLista();
 				}else if(uno==true&&rol.equals("Operador")){
 					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
-					ventanaLogin.dispose();
 					menuOperador();
+					user.setText("");
+					contra.setText("");
+				}else if(uno==true&&rol.equals("Cliente")){
+					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
+					menuCliente();
+					user.setText("");
+					contra.setText("");
 				}else{
 					JOptionPane.showMessageDialog(null, "Verifique sus credenciales");
 				}
@@ -289,15 +283,33 @@ public class Login {
 		verificar.setBounds(105,200,80,20);
 		agregar = new JButton("Aceptar");
 		agregar.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id,nombre,fech,rol,user,password;
+				String id,nombre,rol,user,password;
+				Date fech;
 				id = ids.getText();
 				nombre = nombres.getText();
-				fech = fecha.getText();
+				fech = convertirFecha(fecha.getText());
+				password = contraseña.getText();
 				rol = String.valueOf(roles.getSelectedItem());
 				user = userss.getText();
+				boolean dos = false;
+				for(int i=0;i<cont;i++){
+					if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
+						dos=true;
+					}else{
+						dos=false;
+					}
+				}
+				if(dos == true){
+					JOptionPane.showMessageDialog(null, "Este usuario ya existe");
+				}else if(dos == false){
+					usuarioList[cont]=new Usuario(nombre,rol,id,password,fech);
+					JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
+					cont++;
+				}
+				System.out.println(user+password);
+				recorrerLista();
 			}
 			
 		});
@@ -448,6 +460,64 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
+	public void menuCliente(){
+		JButton remesasCobradas,remesasCompradas,salir;
+		JDialog dialog = new JDialog();
+		JPanel panelIzquierdo = new JPanel();
+		panelIzquierdo.setLayout(new GridLayout(2,2,3,3));
+		JPanel panelDerecho = new JPanel();
+		panelDerecho.setLayout(new GridLayout(2,2,3,3));
+		JPanel panelAbajo = new JPanel();
+		JPanel arriba = new JPanel();
+		JLabel label2 = new JLabel("Panel de Cliente");
+		label2.setFont(new Font("Tahoma",0,35));
+		arriba.add(label2);
+		remesasCobradas = new JButton("Remesas Cobradas");
+		remesasCobradas.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				menuControlUsuarios();
+			}
+			
+		});
+		remesasCompradas = new JButton("Remesas Compradas");
+		remesasCompradas.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		salir = new JButton("Logaut");
+		salir.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				logaut(dialog);
+			}
+			
+		});
+		panelAbajo.setPreferredSize(new Dimension(55,0));
+		panelIzquierdo.add(remesasCobradas);
+		panelDerecho.add(salir);
+		panelIzquierdo.setPreferredSize(new Dimension(300,0));
+		panelDerecho.setPreferredSize(new Dimension(300,0));
+		panelIzquierdo.add(remesasCompradas);
+		arriba.setPreferredSize(new Dimension(0,100));
+		dialog.add(arriba, BorderLayout.NORTH);
+		dialog.add(panelIzquierdo,BorderLayout.WEST);
+		dialog.add(panelDerecho,BorderLayout.EAST);
+		dialog.add(panelAbajo, BorderLayout.SOUTH);
+		dialog.setLocationRelativeTo(null);
+		panelDerecho.setBackground(Color.WHITE);
+		panelIzquierdo.setBackground(Color.WHITE);
+		arriba.setBackground(Color.WHITE);
+		dialog.setSize(620,620);;
+		dialog.setVisible(true);
+		dialog.setLocationRelativeTo(null);
+	}
 	public void cargaMasiva(){
 		JPanel arriba = new JPanel();
 		try{
@@ -507,11 +577,6 @@ public class Login {
 	public void logaut(JDialog ventana){
 		ventana.dispose();
 	}
-	public void recorrerLista(){
-		for(int i=0;i<cont;i++){
-				System.out.println(usuarioList[i].getNombre());
-		}
-	}
 	public boolean login(String nombre, String password){
 		boolean acceso=false;
 		for(int i=0;i<cont;i++){
@@ -530,5 +595,28 @@ public class Login {
 		}
 		return rol;
 	}
-	
+	 public static Date convertirFecha(String fecha)
+	    {
+	        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+	        Date fechaDate = null;
+	        try {
+	            fechaDate = formato.parse(fecha);
+	        } 
+	        catch (ParseException ex) 
+	        {
+	            System.out.println(ex);
+	        }
+	        return fechaDate;
+	    }
+	public void cargarUsuarios(){
+		usuarioList[cont]=new Usuario("Edson","Administrador","201701029","123",null);
+		cont++;
+		/*usuarioList[1]=new Usuario("Arma","Operador","201701029","125",null);
+		usuarioList[2]=new Usuario("Lucia","Cliente","201701029","126",null);*/
+	}
+	public void recorrerLista(){
+		for(int i=0;i<cont;i++){
+				System.out.println(usuarioList[i].getNombre());
+		}
+	}
 }
