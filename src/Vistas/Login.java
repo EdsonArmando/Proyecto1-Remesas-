@@ -27,8 +27,12 @@ import Modelos.Usuario;
 
 public class Login {
 	int cont =1;
+	int cont2=0;
 	Scanner sc = new Scanner(System.in);
 	Usuario[] usuarioList = new Usuario[50];
+	Usuario[] listaSolicitudes = new Usuario[50];
+	String nombreUsuario=null;
+	JPasswordField  contraseña=null;
 	public void formulario() {
 		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null);
 		JPanel login;
@@ -69,6 +73,7 @@ public class Login {
 				nombre = user.getText();
 				password = contra.getText();
 				rol=tipoUsuario(nombre,password);
+				nombreUsuario=tipoUsuario(nombre,password);
 				boolean uno = login(nombre,password);
 				if(uno==true&&rol.equals("Administrador")){
 					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
@@ -239,20 +244,25 @@ public class Login {
 		dialog.setLocationRelativeTo(null);
 	}
 	public void formularioCrearUsuario(){
-		JPasswordField  contraseña,verificas;
-		JTextField ids,nombres,fecha,userss,rols,passwordsa;
+		JPasswordField verificas=null;
+		JTextField ids,nombres,fecha,userss,rols,passwordsa=null;
 		JComboBox roles,rolse2;
 		JPanel arriba = new JPanel();
-		JLabel verificars;
-		JPasswordField verificar;
+		JLabel verificars=null;
+		JPasswordField verificar=null;
 		JDialog dialogUsuario = new JDialog();
 		JButton agregar,cancelar,cargaMasiva;
 		JPanel panelUsuario = new JPanel();
 		panelUsuario.setLayout(null);
-		JLabel idss,nombress,fechas,users,rolss,contraseñas;
-		JPasswordField passwords;
-		idss = new JLabel("CUI: ");
-		idss.setBounds(10,20,80,20);
+		JLabel idss=null,nombress,fechas,users,rolss,contraseñas=null,label2=null;
+		JPasswordField passwords=null;
+		if(nombreUsuario.equals("Administrador")){
+			idss = new JLabel("CUI: ");
+			idss.setBounds(10,20,80,20);
+		}else if(nombreUsuario.equals("Operador")){
+			idss = new JLabel("Pasaporte: ");
+			idss.setBounds(10,20,80,20);
+		}
 		nombress = new JLabel("Nombre:");
 		nombress.setBounds(10,50,95,20);
 		fechas = new JLabel("Fecha: ");
@@ -261,10 +271,28 @@ public class Login {
 		users.setBounds(10,110,95,20);
 		rolss = new JLabel("Rol: ");
 		rolss.setBounds(10,140,95,20);
-		contraseñas = new JLabel("Contraseña");
-		contraseñas.setBounds(10,170,110,20);
-		verificars = new JLabel("Verificar");
-		verificars.setBounds(10,200,110,20);
+		if(nombreUsuario.equals("Administrador")){
+			contraseñas = new JLabel("Contraseña");
+			contraseñas.setBounds(10,170,110,20);
+			contraseña = new JPasswordField();
+			contraseña.setBounds(105,170,80,20);
+		}else if(nombreUsuario.equals("Operador")){
+			contraseñas = new JLabel("Contraseña");
+			contraseñas.setBounds(10,80,95,20);
+			contraseña = new JPasswordField();
+			contraseña.setBounds(105,80,80,20);
+		}
+		if(nombreUsuario.equals("Administrador")){
+			verificars = new JLabel("Verificar");
+			verificars.setBounds(10,200,110,20);
+			verificar = new JPasswordField();
+			verificar.setBounds(105,200,80,20);
+		}else if(nombreUsuario.equals("Operador")){
+			verificars = new JLabel("Verificar");
+			verificars.setBounds(10,110,95,20);
+			verificar = new JPasswordField();
+			verificar.setBounds(105,110,80,20);
+		}
 		ids = new JTextField();
 		ids.setBounds(105,20,80,20);
 		nombres = new JTextField();
@@ -277,10 +305,6 @@ public class Login {
 		roles.addItem("Operador");
 		roles.addItem("Cliente");
 		roles.setBounds(105,140,80,20);
-		contraseña = new JPasswordField();
-		contraseña.setBounds(105,170,80,20);
-		verificar = new JPasswordField();
-		verificar.setBounds(105,200,80,20);
 		agregar = new JButton("Aceptar");
 		agregar.addActionListener(new ActionListener(){
 			@Override
@@ -294,22 +318,41 @@ public class Login {
 				rol = String.valueOf(roles.getSelectedItem());
 				user = userss.getText();
 				boolean dos = false;
-				for(int i=0;i<cont;i++){
-					if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
-						dos=true;
-					}else{
-						dos=false;
+				if(nombreUsuario.equals("Administrador")){
+					for(int i=0;i<cont;i++){
+						if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
+							dos=true;
+						}else{
+							dos=false;
+						}
 					}
+					if(dos == true){
+						JOptionPane.showMessageDialog(null, "Este usuario ya existe");
+					}else if(dos == false){
+						usuarioList[cont]=new Usuario(nombre,rol,id,password,fech);
+						JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
+						cont++;
+					}
+					System.out.println(user+password);
+					recorrerLista();
 				}
-				if(dos == true){
-					JOptionPane.showMessageDialog(null, "Este usuario ya existe");
-				}else if(dos == false){
-					usuarioList[cont]=new Usuario(nombre,rol,id,password,fech);
-					JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
-					cont++;
+				if(nombreUsuario.equals("Operador")){
+					for(int i=0;i<cont2;i++){
+						if(listaSolicitudes[i].getNombre().equals(nombre)&&listaSolicitudes[i].getPassword().equals(password)){
+							dos=true;
+						}else{
+							dos=false;
+						}
+					}
+					if(dos == true){
+						JOptionPane.showMessageDialog(null, "Este usuario ya existe");
+					}else if(dos == false){
+						listaSolicitudes[cont2]=new Usuario(nombre,"Cliente",id,password,null);
+						JOptionPane.showMessageDialog(null, "La solicitud fue enviada exitosamente");
+						cont2++;
+					}
+					recorrerListaDos();
 				}
-				System.out.println(user+password);
-				recorrerLista();
 			}
 			
 		});
@@ -351,29 +394,46 @@ public class Login {
 			}
 			
 		});
-		JLabel label2 = new JLabel("Formulario de Usuarios");
+		if(nombreUsuario.equals("Administrador")){
+			label2 = new JLabel("Formulario de Usuarios");
+	    }else if(nombreUsuario.equals("Operador")){
+	    	label2 = new JLabel("Solicitud de registro");
+	    }
 	    label2.setFont(new Font("Tahoma",0,35));
 	    arriba.add(label2);
 	    dialogUsuario.add(arriba, BorderLayout.NORTH);
-		agregar.setBounds(105, 230, 80, 20);
-		cancelar.setBounds(205, 230, 80, 20);
-		cargaMasiva.setBounds(305, 230, 80, 20);
+	    if(nombreUsuario.equals("Administrador")){
+	    	agregar.setBounds(105, 230, 80, 20);
+			cancelar.setBounds(205, 230, 80, 20);
+			cargaMasiva.setBounds(305, 230, 80, 20);
+	    }else if(nombreUsuario.equals("Operador")){
+	    	agregar.setBounds(10,140,95,20);
+			cancelar.setBounds(105,140,80,20);
+	    }
 		panelUsuario.add(idss);
 		panelUsuario.add(cancelar);
 		panelUsuario.add(nombres);
-		panelUsuario.add(fecha);
-		panelUsuario.add(userss);
-		panelUsuario.add(rolss);
+		if(nombreUsuario.equals("Administrador")){
+			panelUsuario.add(fecha);
+			panelUsuario.add(fechas);
+		}
+		if(nombreUsuario.equals("Administrador")){
+			panelUsuario.add(userss);
+			panelUsuario.add(users);
+		}
+		if(nombreUsuario.equals("Administrador")){
+			panelUsuario.add(rolss);
+			panelUsuario.add(roles);
+		}
 		panelUsuario.add(verificars);
 		panelUsuario.add(agregar);
-		panelUsuario.add(cargaMasiva);
+		if(nombreUsuario.equals("Administrador")){
+			panelUsuario.add(cargaMasiva);
+		}
 		panelUsuario.add(contraseña);
 		panelUsuario.add(contraseñas);
 		panelUsuario.add(nombress);
 		panelUsuario.add(verificar);
-		panelUsuario.add(fechas);
-		panelUsuario.add(users);
-		panelUsuario.add(roles);
 		panelUsuario.add(ids);
 		dialogUsuario.add(panelUsuario);
 		dialogUsuario.setLocationRelativeTo(null);
@@ -399,7 +459,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menuControlUsuarios();
+				formularioCrearUsuario();
 			}
 			
 		});
@@ -477,7 +537,6 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menuControlUsuarios();
 			}
 			
 		});
@@ -526,39 +585,23 @@ public class Login {
 			JPanel panel = new JPanel(new FlowLayout());
 			JLabel tipos;
 			JTextArea text=new JTextArea(15,40);
-			text.setText("Nombre:"+"Edson Guix"+"Contraseña:"+"123"+"Pasaporte:"+"123456789");
+			text.setText("nombre;"+",dpi;"+",fecha;"+",username;"+",contraseña;");
 			panel.add(text,BorderLayout.CENTER);
 			panel.add(aceptar = new JButton("Aceptar"),BorderLayout.WEST);
 			aceptar.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String tipos,autors,titulos,edicions,
-					palabrasClaves,descripcions,temass,noCopiass,noDisponibles,frecuenciaActuals,ejemplaress,areass;
+					String nombre,dpi,username,contraseña,fecha1;
+					Date fecha;
 						String uno =text.getText();
 						String[] parts = uno.split(";");
 						System.out.println(parts.length);
-						if(parts[0].equals("0")){
-							parts[0]="Libro";
-							System.out.println(parts[0]);
-						}
-						if(parts[0].equals("1")){
-							parts[0]="Revista";
-						}
-						if(parts[0].equals("2")){
-							parts[0]="Tesis";
-						}
-						tipos = parts[0];
-						autors = parts[1];
-						titulos = parts[2];
-						edicions = parts[3];
-						palabrasClaves = parts[4];
-						descripcions = parts[5];
-						temass = parts[6];
-						noCopiass = parts[7];
-						noDisponibles = parts[8];
-						frecuenciaActuals = parts[9];
-						ejemplaress = parts[10];
-						areass = parts[11];		
+						nombre = parts[0];
+						dpi = parts[1];
+						fecha1 = parts[2];
+						username = parts[3];
+						contraseña = parts[4];	
+						System.out.println(nombre+dpi+fecha1+username+contraseña);
 				}
 				
 			});
@@ -617,6 +660,11 @@ public class Login {
 	public void recorrerLista(){
 		for(int i=0;i<cont;i++){
 				System.out.println(usuarioList[i].getNombre());
+		}
+	}
+	public void recorrerListaDos(){
+		for(int i=0;i<cont2;i++){
+				System.out.println(listaSolicitudes[i].getNombre());
 		}
 	}
 }
