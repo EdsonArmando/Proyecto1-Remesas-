@@ -34,12 +34,20 @@ import Modelos.Usuario;
 public class Login {
 	int cont =2;
 	int cont2=0;
+	boolean soli=false;
 	Scanner sc = new Scanner(System.in);
 	Usuario[] usuarioList = new Usuario[50];
-	Usuario[] listaSolicitudes = new Usuario[50];
+	Usuario[]listaSolicitudes = new Usuario[50];
 	String nombreUsuario=null;
 	JLabel idss=null;
 	JPasswordField  contraseña=null;
+	
+	public Usuario[] getUsuarioList() {
+		return usuarioList;
+	}
+	public void setUsuarioList(Usuario[] usuarioList) {
+		this.usuarioList = usuarioList;
+	}
 	public void formulario() {
 		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null);
 		usuarioList[1] = new Usuario("Emiliana","Operador","254158","125",null);
@@ -217,8 +225,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				eliminarUsuario();
 			}
 			
 		});
@@ -258,7 +265,7 @@ public class Login {
 		JLabel usuario;
 		JComboBox id;
 		  String[] columns = {"Pasaporte", "Nombre", "Rol"};
-		    Object [][]data = new Object[cont][3];
+		    Object [][]data = new Object[cont2][3];
 		        for(int i=0;i<cont2;i++){
 					try{
 						data[i][0]=listaSolicitudes[i].getIdentificador();
@@ -319,6 +326,7 @@ public class Login {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean dos=false;
+				int posicion=0;
 				String nombre=null,rol=null,identificador=null,password=null;
 				Date fechaIncio = null;
 				for(int i=0;i<cont2;i++){
@@ -327,7 +335,8 @@ public class Login {
 						nombre=listaSolicitudes[i].getNombre();
 						password=listaSolicitudes[i].getPassword();
 						fechaIncio= listaSolicitudes[i].getFechaInicio();
-						rol =listaSolicitudes[i].getRol();						
+						rol =listaSolicitudes[i].getRol();		
+						//posicion = i;
 					}
 				}
 				for(int i=0;i<cont;i++){
@@ -338,11 +347,12 @@ public class Login {
 					}
 				}
 				if(dos == true){
-					JOptionPane.showMessageDialog(null, "Este usuario ya existe");
+					JOptionPane.showMessageDialog(null, "La solicitud ya fue aprobada");
 				}else if(dos == false){
 					usuarioList[cont]=new Usuario(nombre,rol,identificador,password,null);
-					JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
+					JOptionPane.showMessageDialog(null, "La solicitud fue aprobada exitosamente");
 					cont++;
+				
 				}
 				recorrerLista();
 				
@@ -356,33 +366,45 @@ public class Login {
 	    uno.setLocationRelativeTo(null);
 	    uno.setVisible(true);
 	}
-	/*public void tablaSolicitudUsuarios(){
-		final JFrame frame = new JFrame("JTable Demo");
-	    String[] columns = {"Pasaporte", "Nombre", "Rol"};
-	    Object [][]data = new Object[cont][3];
-	        for(int i=0;i<cont;i++){
-				try{
-					data[i][0]=listaSolicitudes[i].getIdentificador();
-					data[i][1]=listaSolicitudes[i].getNombre();
-					data[i][2]=listaSolicitudes[i].getRol();
-					
-				}catch(NullPointerException e){
-					System.out.print("NullPointerException caught");
+	public void eliminarUsuario(){
+		JPanel arriba = new JPanel();
+		JFrame uno=new JFrame();
+		JPanel pane= new JPanel();
+		JButton agregar;
+		JLabel usuario;
+		JComboBox id;
+		  String[] columns = {"Pasaporte", "Nombre", "Rol"};
+		    Object [][]data = new Object[cont][3];
+		        for(int i=0;i<cont;i++){
+					try{
+						data[i][0]=usuarioList[i].getIdentificador();
+						data[i][1]=usuarioList[i].getNombre();
+						data[i][2]=usuarioList[i].getRol();
+						
+					}catch(NullPointerException e){
+						System.out.print("NullPointerException caught");
+					}
 				}
-			}
-	        JTable table = new JTable(data, columns);
-	        JScrollPane scrollPane = new JScrollPane(table);
-	        JLabel lblHeading = new JLabel("Solicitud de registro");
-	        lblHeading.setFont(new Font("Arial",Font.TRUETYPE_FONT,24));
-	       table.addMouseListener(new MouseListener(){
+	    JTable table = new JTable(data, columns);
+
+	    JScrollPane scrollPane = new JScrollPane(table);
+	    uno.add(scrollPane, BorderLayout.CENTER);
+	    JLabel label2 = new JLabel("Eliminar Usuario");
+	    label2.setFont(new Font("Tahoma",0,35));
+	    arriba.add(label2);
+	    pane = new JPanel(new FlowLayout());
+	    pane.add(usuario=new JLabel("Identificador: "));
+	    pane.add(id=new JComboBox());
+	    pane.add(agregar =new JButton("Aceptar"));
+	    table.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row=table.rowAtPoint(e.getPoint());
 
 				int col= table.columnAtPoint(e.getPoint());
-
-				System.out.println(" Value in the cell clicked :"+ " " +table.getValueAt(row,col).toString());
+				String identificador = table.getValueAt(row,col).toString();
+				id.addItem(identificador);
 			}
 
 			@Override
@@ -408,14 +430,35 @@ public class Login {
 			}
 	    	   
 	       });
-	        frame.getContentPane().setLayout(new BorderLayout());
-	        frame.getContentPane().add(lblHeading,BorderLayout.PAGE_START);
-	        frame.getContentPane().add(scrollPane,BorderLayout.CENTER);
-	        frame.setSize(550, 200);
-	        frame.setVisible(true);
-	        frame.setLocationRelativeTo(null);
+	    agregar.addActionListener(new ActionListener(){
 
-	}*/
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String identificador=null;
+				int posicion=0;
+				for(int i=0;i<cont;i++){
+					if(id.getSelectedItem().equals(usuarioList[i].getIdentificador())){
+						identificador=usuarioList[i].getIdentificador();
+						posicion=i;
+					}
+				}
+				boolean result = eliminarUsuarios(posicion);
+				if(result==true){
+					JOptionPane.showMessageDialog(null, "El usuario fue eliminado");
+				}else if(result==false){
+					JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuaio");
+				}
+				
+			}
+	    	
+	    });
+	    pane.setPreferredSize(new Dimension(200,0));
+	    uno.add(pane,BorderLayout.WEST);
+	    uno.add(arriba, BorderLayout.NORTH);
+	    uno.setSize(600, 400);
+	    uno.setLocationRelativeTo(null);
+	    uno.setVisible(true);
+	}
 	public void formularioCrearUsuario(){
 		JPasswordField verificas=null;
 		JTextField ids,nombres,fecha,userss,rols,passwordsa=null;
@@ -813,7 +856,7 @@ public class Login {
 		}
 		return rol;
 	}
-	 public static Date convertirFecha(String fecha)
+	public static Date convertirFecha(String fecha)
 	    {
 	        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 	        Date fechaDate = null;
@@ -833,13 +876,43 @@ public class Login {
 		usuarioList[2]=new Usuario("Lucia","Cliente","201701029","126",null);*/
 	}
 	public void recorrerLista(){
+
 		for(int i=0;i<cont;i++){
 				System.out.println(usuarioList[i].getNombre());
 		}
+	}
+	public boolean eliminarUsuarios(int posicion){
+		boolean result = false;
+		for (int i = 0; i < cont; i++) {
+            if (i== posicion) {
+                for (int j = i; j < cont - 1; j++) {
+                    usuarioList[j] = usuarioList[j+1];
+                }
+                usuarioList[cont - 1] = null;
+                result = true;
+            }
+        }
+		cont--;
+		return result;
+	}
+	public boolean eliminarSolicitudes(int posicion){
+		boolean result = false;
+		for (int i = 0; i < cont2; i++) {
+            if (i== posicion) {
+                for (int j = i; j < cont2 - 1; j++) {
+                    listaSolicitudes[j] = listaSolicitudes[j+1];
+                }
+                listaSolicitudes[cont2 - 1] = null;
+                result = true;
+            }
+        }
+		cont2--;
+		return result;
 	}
 	public void recorrerListaDos(){
 		for(int i=0;i<cont2;i++){
 				System.out.println(listaSolicitudes[i].getNombre());
 		}
 	}
+	
 }
