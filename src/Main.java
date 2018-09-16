@@ -43,7 +43,6 @@ public class Main{
 		ma.inicio();
 	}
 	public void inicio() {
-		Login log = new Login();
 		JFrame inicio;
 		JButton login;
 		JPanel panel1;

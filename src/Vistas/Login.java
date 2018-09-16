@@ -32,22 +32,17 @@ import javax.swing.JTextField;
 import Modelos.Usuario;
 
 public class Login {
-	int cont =2;
+	Scanner sc = new Scanner(System.in);
+	static int cont =2;
 	int cont2=0;
 	boolean soli=false;
-	Scanner sc = new Scanner(System.in);
-	Usuario[] usuarioList = new Usuario[50];
+	static Usuario[] usuarioList = new Usuario[50];
 	Usuario[]listaSolicitudes = new Usuario[50];
 	String nombreUsuario=null;
 	JLabel idss=null;
 	JPasswordField  contraseña=null;
+	static RemesasVista reme = new RemesasVista();
 	
-	public Usuario[] getUsuarioList() {
-		return usuarioList;
-	}
-	public void setUsuarioList(Usuario[] usuarioList) {
-		this.usuarioList = usuarioList;
-	}
 	public void formulario() {
 		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null);
 		usuarioList[1] = new Usuario("Emiliana","Operador","254158","125",null);
@@ -686,8 +681,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+			reme.ventasOperador();
 			}
 			
 		});
@@ -913,6 +907,19 @@ public class Login {
 		for(int i=0;i<cont2;i++){
 				System.out.println(listaSolicitudes[i].getNombre());
 		}
+	}
+	public Usuario[] getUsuarioList() {
+		
+		return usuarioList;
+	}
+	public void setUsuarioList(Usuario[] usuarioList) {
+		this.usuarioList = usuarioList;
+	}
+	public int getCont() {
+		return cont;
+	}
+	public void setCont(int cont) {
+		this.cont = cont;
 	}
 	
 }
