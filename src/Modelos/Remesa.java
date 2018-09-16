@@ -10,6 +10,13 @@ public class Remesa {
 	Date fechaVenta;
 	double costo=0.0;
 	boolean cobrada=false;
+	Date fechaPago;
+	public Date getFechaPago() {
+		return fechaPago;
+	}
+	public void setFechaPago(Date fechaPago) {
+		this.fechaPago = fechaPago;
+	}
 	public int getId() {
 		return id;
 	}
@@ -53,7 +60,7 @@ public class Remesa {
 	public void setCobrada(boolean cobrada) {
 		this.cobrada = cobrada;
 	}
-	public Remesa(int id, String remitente, String beneficiario, double montoEnviar, Date fechaVenta, double costo,boolean cobrada) {
+	public Remesa(int id, String remitente, String beneficiario, double montoEnviar, Date fechaVenta, double costo,boolean cobrada,Date fechaPago) {
 		super();
 		this.id = id;
 		this.remitente = remitente;
@@ -62,6 +69,7 @@ public class Remesa {
 		this.fechaVenta = fechaVenta;
 		this.costo = costo;
 		this.cobrada=cobrada;
+		this.fechaPago = fechaPago;
 	}
 	public Remesa() {
 		super();

@@ -42,7 +42,7 @@ public class Login {
 	JLabel idss=null;
 	JPasswordField  contraseña=null;
 	static RemesasVista reme = new RemesasVista();
-	
+	static String nombre;
 	public void formulario() {
 		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null);
 		usuarioList[1] = new Usuario("Emiliana","Operador","254158","125",null);
@@ -80,7 +80,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nombre,password,rol;
+				String password,rol;
 				nombre = user.getText();
 				password = contra.getText();
 				rol=tipoUsuario(nombre,password);
@@ -690,8 +690,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				reme.cobrarRemesa(nombre);
 			}
 			
 		});
@@ -699,7 +698,7 @@ public class Login {
 		consulta.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logaut(dialog);
+				reme.consultaRemesa();
 			}
 			
 		});
