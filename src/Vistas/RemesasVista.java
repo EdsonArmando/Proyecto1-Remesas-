@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -86,7 +88,7 @@ public class RemesasVista {
 								recorrerListaRemesas(idBene);
 						 }
 							        
-					}else if(remi&&bene==false){
+					}else{
 						JOptionPane.showMessageDialog(null,"Los pasaportes son inválidos");
 					}
 				}
@@ -153,22 +155,26 @@ public class RemesasVista {
 		return ambas;
 	}
 	public static void consultaRemesa(){
+		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		JPanel arriba = new JPanel();
 		JFrame uno=new JFrame();
 		JButton agregar;
 		JLabel usuario;
 		JComboBox id;
-		  String[] columns = {"Id", "Emisario", "Beneficiario","Estado"};
-		    Object [][]data = new Object[contReme][4];
+		  String[] columns = {"Id", "Emisario", "Beneficiario","Fecha Venta","Hora Venta","Estado"};
+		    Object [][]data = new Object[contReme][6];
 		        for(int i=0;i<contReme;i++){
 					try{
 						data[i][0]=listaRemesa[i].getId();
 						data[i][1]=listaRemesa[i].getRemitente();
 						data[i][2]=listaRemesa[i].getBeneficiario();
+						data[i][3]=dateFormat.format(listaRemesa[i].getFechaVenta());
+						data[i][4]=hourFormat.format(listaRemesa[i].getFechaVenta());
 						if(listaRemesa[i].isCobrada()==false){
-							data[i][3]="Sin cancelar";
+							data[i][5]="Sin cancelar";
 						}else if(listaRemesa[i].isCobrada()==true){
-							data[i][3]="pagada";
+							data[i][5]="pagada";
 						}
 						
 					}catch(NullPointerException e){
@@ -268,14 +274,19 @@ public class RemesasVista {
 				System.out.println(beneficiario);
 				System.out.println(id);
 				System.out.println(disponible);
-				if(disponible==true){
-					JOptionPane.showMessageDialog(null,"Esta remesa ya fue cobrada");
-				}else if(disponible==false){
-					if(beneficiario==true&&id==true&&disponible==false){
-						cobrarRemesa(idReme);
-						JOptionPane.showMessageDialog(null,"Pago de remesa exitosa");
+				if(id&&beneficiario==true){
+					if(disponible==true){
+						JOptionPane.showMessageDialog(null,"Esta remesa ya fue cobrada");
+					}else if(disponible==false){
+						if(beneficiario==true&&id==true&&disponible==false){
+							cobrarRemesa(idReme);
+							JOptionPane.showMessageDialog(null,"Pago de remesa exitosa");
+						}
 					}
+				}else {
+					JOptionPane.showMessageDialog(null,"Datos Incorrectos");
 				}
+			
 			}
 			
 		});
