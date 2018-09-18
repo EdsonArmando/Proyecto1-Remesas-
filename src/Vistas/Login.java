@@ -35,6 +35,10 @@ public class Login {
 	Scanner sc = new Scanner(System.in);
 	static int cont =2;
 	int cont2=0;
+	static double limiteCompra=5000;
+	static double limitePago=5000;
+	static double tipoCambio=7.5;
+	static double porcentajeCambio=0.1;
 	boolean soli=false;
 	static Usuario[] usuarioList = new Usuario[50];
 	Usuario[]listaSolicitudes = new Usuario[50];
@@ -151,8 +155,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				configuracionDatosRemesas();
 			}
 			
 		});
@@ -748,6 +751,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				reme.consultaRemesaClienteCobradas(nombre);
 			}
 			
 		});
@@ -756,7 +760,7 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				reme.consultaRemesaClienteComprada(nombre);
 				
 			}
 			
@@ -787,6 +791,83 @@ public class Login {
 		dialog.setSize(620,620);;
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
+	}
+	public void configuracionDatosRemesas(){
+		JTextField limiteCompras,limitePagos,tipoCambios,porcentajeGanancias;
+		JPanel arriba = new JPanel();
+		JDialog dialogUsuario = new JDialog();
+		JButton agregar,cancelar;
+		JPanel panelUsuario = new JPanel();
+		panelUsuario.setLayout(null);
+		JLabel limCompra,limPago,tipCambio,porcentaje=null,label2;
+		limCompra = new JLabel("Limite Compra: ");
+		limCompra.setBounds(10,20,80,20);
+		limPago = new JLabel("Limite Pago: ");
+		limPago.setBounds(10,50,95,20);
+		tipCambio = new JLabel("Tipo de cambio: ");
+		tipCambio.setBounds(10,80,95,20);
+		porcentaje = new JLabel("% Ganancia: ");
+		porcentaje.setBounds(10,110,95,20);
+		limiteCompras = new JTextField();
+		limiteCompras.setBounds(105,20,80,20);
+		limiteCompras.setText(String.valueOf(limiteCompra));
+		limitePagos = new JTextField();
+		limitePagos.setBounds(105, 50, 80, 20);
+		limitePagos.setText(String.valueOf(limitePago));
+		tipoCambios = new JTextField();
+		tipoCambios.setText(String.valueOf(tipoCambio));
+		tipoCambios.setBounds(105,80,80,20);
+		porcentajeGanancias = new JTextField();
+		porcentajeGanancias.setBounds(105,110,80,20);
+		porcentajeGanancias.setText(String.valueOf(porcentajeCambio));
+		agregar = new JButton("Aceptar");
+		agregar.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 double limiteComprass=Double.parseDouble(limiteCompras.getText());
+				 double limitePagoss=Double.parseDouble(limitePagos.getText());
+				 double tipoCambioss=Double.parseDouble(tipoCambios.getText());
+				 double porcentajeGananciass=Double.parseDouble(porcentajeGanancias.getText());
+				 limiteCompra=setLimiteCompra(limiteComprass);
+				 limitePago=setLimitePago(limitePagoss);;
+				 tipoCambio = setTipoCambio(tipoCambioss);
+				 porcentajeCambio=setPorcentajeCambio(porcentajeGananciass);
+				 dialogUsuario.dispose();
+					System.out.println(limiteCompra);
+			}
+		});
+		cancelar = new JButton("Cancelar");
+		cancelar.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogUsuario.dispose();
+				
+			}
+			
+		});
+		label2 = new JLabel("Configuración de datos");
+	    label2.setFont(new Font("Tahoma",0,35));
+	    arriba.add(label2);
+	    dialogUsuario.add(arriba, BorderLayout.NORTH);
+    	agregar.setBounds(10,140,95,20);
+		cancelar.setBounds(105,140,80,20);
+		panelUsuario.add(limiteCompras);
+		panelUsuario.add(cancelar);
+		panelUsuario.add(limitePagos);
+		panelUsuario.add(tipoCambios);
+		panelUsuario.add(porcentajeGanancias);
+		panelUsuario.add(limCompra);
+		panelUsuario.add(limPago);
+		panelUsuario.add(agregar);
+		panelUsuario.add(tipCambio);
+		panelUsuario.add(porcentaje);
+		dialogUsuario.add(panelUsuario);
+		dialogUsuario.setLocationRelativeTo(null);
+		dialogUsuario.setSize(400,400);
+		dialogUsuario.setVisible(true);
+		dialogUsuario.setLocationRelativeTo(null);
+	
 	}
 	public void cargaMasiva(){
 		JPanel arriba = new JPanel();
@@ -917,8 +998,34 @@ public class Login {
 	public int getCont() {
 		return cont;
 	}
-	public void setCont(int cont) {
-		this.cont = cont;
+	public static double getLimiteCompra() {
+		return limiteCompra;
 	}
+	public static double setLimiteCompra(double limiteCompra) {
+		Login.limiteCompra = limiteCompra;
+		return Login.limiteCompra;
+	}
+	public static double getLimitePago() {
+		return limitePago;
+	}
+	public static double setLimitePago(double limitePago) {
+		Login.limitePago = limitePago;
+		return Login.limitePago;
+	}
+	public static double getTipoCambio() {
+		return tipoCambio;
+	}
+	public static double setTipoCambio(double tipoCambio) {
+		Login.tipoCambio = tipoCambio;
+		return Login.tipoCambio;
+	}
+	public static double getPorcentajeCambio() {
+		return porcentajeCambio;
+	}
+	public static double setPorcentajeCambio(double porcentajeCambio) {
+		Login.porcentajeCambio = porcentajeCambio;
+		return Login.porcentajeCambio;
+	}
+	
 	
 }
