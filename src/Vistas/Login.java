@@ -30,26 +30,25 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Modelos.Usuario;
-
 public class Login {
 	Scanner sc = new Scanner(System.in);
 	static int cont =2;
-	int cont2=0;
+	static int cont2=0;
 	static double limiteCompra=5000;
 	static double limitePago=5000;
 	static double tipoCambio=7.5;
 	static double porcentajeCambio=0.1;
 	boolean soli=false;
 	static Usuario[] usuarioList = new Usuario[50];
-	Usuario[]listaSolicitudes = new Usuario[50];
+	static Usuario[]listaSolicitudes = new Usuario[50];
 	String nombreUsuario=null;
 	JLabel idss=null;
 	JPasswordField  contraseña=null;
 	static RemesasVista reme = new RemesasVista();
 	static String nombre;
 	public void formulario() {
-		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null);
-		usuarioList[1] = new Usuario("Emiliana","Operador","254158","125",null);
+		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null,"Emi");
+		usuarioList[1] = new Usuario("Emiliana","Operador","254158","125",null,"Emi");
 		JPanel login;
 		JDialog ventanaLogin;
 		JLabel usuario,contraseña;
@@ -333,26 +332,9 @@ public class Login {
 						password=listaSolicitudes[i].getPassword();
 						fechaIncio= listaSolicitudes[i].getFechaInicio();
 						rol =listaSolicitudes[i].getRol();		
-						//posicion = i;
 					}
 				}
-				for(int i=0;i<cont;i++){
-					if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
-						dos=true;
-					}else{
-						dos=false;
-					}
-				}
-				if(dos == true){
-					JOptionPane.showMessageDialog(null, "La solicitud ya fue aprobada");
-				}else if(dos == false){
-					usuarioList[cont]=new Usuario(nombre,rol,identificador,password,null);
-					JOptionPane.showMessageDialog(null, "La solicitud fue aprobada exitosamente");
-					cont++;
-				
-				}
-				recorrerLista();
-				
+				guardarUsuario(nombre,rol,identificador,password,null,null);
 			}
 	    	
 	    });
@@ -532,39 +514,10 @@ public class Login {
 				user = userss.getText();
 				boolean dos = false;
 				if(nombreUsuario.equals("Administrador")){
-					for(int i=0;i<cont;i++){
-						if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
-							dos=true;
-						}else{
-							dos=false;
-						}
-					}
-					if(dos == true){
-						JOptionPane.showMessageDialog(null, "Este usuario ya existe");
-					}else if(dos == false){
-						usuarioList[cont]=new Usuario(nombre,rol,id,password,fech);
-						JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
-						cont++;
-					}
-					System.out.println(user+password);
-					recorrerLista();
+				guardarUsuario(nombre,rol,id,password,fech,user);
 				}
 				if(nombreUsuario.equals("Operador")){
-					for(int i=0;i<cont2;i++){
-						if(listaSolicitudes[i].getNombre().equals(nombre)&&listaSolicitudes[i].getPassword().equals(password)){
-							dos=true;
-						}else{
-							dos=false;
-						}
-					}
-					if(dos == true){
-						JOptionPane.showMessageDialog(null, "Este usuario ya existe");
-					}else if(dos == false){
-						listaSolicitudes[cont2]=new Usuario(nombre,"Cliente",id,password,null);
-						JOptionPane.showMessageDialog(null, "La solicitud fue enviada exitosamente");
-						cont2++;
-					}
-					recorrerListaDos();
+					guardarUsuarioSolicitud(nombre,"Cliente",id,password,null,null);
 				}
 			}
 			
@@ -876,7 +829,6 @@ public class Login {
 			JPanel panel = new JPanel(new FlowLayout());
 			JLabel tipos;
 			JTextArea text=new JTextArea(15,40);
-			text.setText("nombre;"+",dpi;"+",fecha;"+",username;"+",contraseña;");
 			panel.add(text,BorderLayout.CENTER);
 			panel.add(aceptar = new JButton("Aceptar"),BorderLayout.WEST);
 			aceptar.addActionListener(new ActionListener(){
@@ -884,15 +836,8 @@ public class Login {
 				public void actionPerformed(ActionEvent e) {
 					String nombre,dpi,username,contraseña,fecha1;
 					Date fecha;
-						String uno =text.getText();
-						String[] parts = uno.split(";");
-						System.out.println(parts.length);
-						nombre = parts[0];
-						dpi = parts[1];
-						fecha1 = parts[2];
-						username = parts[3];
-						contraseña = parts[4];	
-						System.out.println(nombre+dpi+fecha1+username+contraseña);
+					String textoMasivo = text.getText();
+				        leerLineas(textoMasivo);
 				}
 				
 			});
@@ -907,6 +852,88 @@ public class Login {
 		}catch(NumberFormatException gf){
 			JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña");
 		}
+	}
+	 static void leerLineas(String superTexto) {
+			String[] nombres = new String[2];
+	    	 String nombre=null,identificador=null,rol=null,contraseña=null,user=null;
+	    	 Date fech=null;
+	        String lineas[] = superTexto.split("\n");
+	        for (String linea : lineas) {
+	            if (linea != "") {
+	                String productos[] = linea.split(",");
+	                int bodega = 0, cpu = 0, gpu = 0, ram = 0, ssd = 0;
+	                for (String producto : productos) {
+	                    String Clave_Valor[] = producto.split(":");
+	                    switch (Clave_Valor[0]) {
+	                        case "Nombre":
+	                        	nombre = Clave_Valor[1];
+	                            break;
+	                        case "CUI":
+	                        	identificador = Clave_Valor[1];
+	                        	rol="Operador";
+	                            break;
+	                        case "Pasaporte":
+	                        	identificador=Clave_Valor[1];
+	                        	rol="Cliente";
+	                    		break;
+	                        case "Contraseña":
+	                        	contraseña=Clave_Valor[1];
+	                        break;
+	                        case "Fecha":
+	                        	fech = convertirFecha(Clave_Valor[1]);
+	                        break;
+	                        case "Username":
+	                        	user = Clave_Valor[1];
+	                        break;
+	                    }
+	                    
+	                }
+	                
+	                } 
+	            	guardarUsuario(nombre,rol,identificador,contraseña,fech,user);
+	               }
+	    }
+	static void guardarUsuario(String name,String rol,String id,String password,Date fech,String user){
+		boolean dos = verificarUse(name,password);
+		if(dos==true){
+			JOptionPane.showMessageDialog(null, "Este usuario ya existe");
+		}else{
+			usuarioList[cont]=new Usuario(name,rol,id,password,fech,user);
+			JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
+			cont++;
+		}
+	}
+	static void guardarUsuarioSolicitud(String name,String rol,String id,String password,Date fech,String user){
+		boolean dos = verificarSoli(name,password);
+		if(dos==true){
+			JOptionPane.showMessageDialog(null, "Este usuario ya existe");
+		}else{
+			listaSolicitudes[cont2]=new Usuario(name,rol,id,password,fech,user);
+			JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
+			cont2++;
+		}
+	}
+	static boolean verificarUse(String nombre, String password){
+		boolean dos = false;
+		for(int i=0;i<cont;i++){
+			if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
+				dos=true;
+			}else{
+				dos=false;
+			}
+		}
+		return dos;
+	}
+	static boolean verificarSoli(String nombre, String password){
+		boolean dos = false;
+		for(int i=0;i<cont2;i++){
+			if(listaSolicitudes[i].getNombre().equals(nombre)&&listaSolicitudes[i].getPassword().equals(password)){
+				dos=true;
+			}else{
+				dos=false;
+			}
+		}
+		return dos;
 	}
 	public void logaut(JDialog ventana){
 		ventana.dispose();
@@ -943,7 +970,7 @@ public class Login {
 	        return fechaDate;
 	    }
 	public void cargarUsuarios(){
-		usuarioList[cont]=new Usuario("Edson","Administrador","201701029","123",null);
+		usuarioList[cont]=new Usuario("Edson","Administrador","201701029","123",null,"Edson");
 		cont++;
 		/*usuarioList[1]=new Usuario("Arma","Operador","201701029","125",null);
 		usuarioList[2]=new Usuario("Lucia","Cliente","201701029","126",null);*/

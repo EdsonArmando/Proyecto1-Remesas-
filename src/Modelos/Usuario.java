@@ -11,6 +11,14 @@ public class Usuario {
 	String identificador;
 	String password;
 	Date fechaInicio;
+	String username;
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public String getNombre() {
 		return nombre;
 	}
@@ -41,13 +49,14 @@ public class Usuario {
 	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
-	public Usuario(String nombre, String rol, String identificador, String password, Date fechaInicio) {
+	public Usuario(String nombre, String rol, String identificador, String password, Date fechaInicio,String username) {
 		super();
 		this.nombre = nombre;
 		this.rol = rol;
 		this.identificador = identificador;
 		this.password = password;
 		this.fechaInicio = fechaInicio;
+		this.username = username;
 	}
 	public Usuario() {
 		super();
