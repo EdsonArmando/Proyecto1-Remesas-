@@ -47,7 +47,7 @@ public class Login {
 	static RemesasVista reme = new RemesasVista();
 	static String nombre;
 	public void formulario() {
-		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null,"Emi");
+		usuarioList[0] = new Usuario("Edson","Administrador","Edson","123",null,"Emi");
 		usuarioList[1] = new Usuario("Emiliana","Operador","254158","125",null,"Emi");
 		JPanel login;
 		JDialog ventanaLogin;
@@ -83,12 +83,14 @@ public class Login {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int pass=0;
 				String password,rol;
-				nombre = user.getText();
+				nombre = retornarNombre(user.getText());
 				password = contra.getText();
 				rol=tipoUsuario(nombre,password);
 				nombreUsuario=tipoUsuario(nombre,password);
 				boolean uno = login(nombre,password);
+				boolean dos = loginAdmin(nombre,password);
 				if(uno==true&&rol.equals("Administrador")){
 					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
 					menuAdministrador();
@@ -854,14 +856,12 @@ public class Login {
 		}
 	}
 	 static void leerLineas(String superTexto) {
-			String[] nombres = new String[2];
 	    	 String nombre=null,identificador=null,rol=null,contraseña=null,user=null;
 	    	 Date fech=null;
 	        String lineas[] = superTexto.split("\n");
 	        for (String linea : lineas) {
 	            if (linea != "") {
 	                String productos[] = linea.split(",");
-	                int bodega = 0, cpu = 0, gpu = 0, ram = 0, ssd = 0;
 	                for (String producto : productos) {
 	                    String Clave_Valor[] = producto.split(":");
 	                    switch (Clave_Valor[0]) {
@@ -924,6 +924,17 @@ public class Login {
 		}
 		return dos;
 	}
+	static boolean verificarUser(String pasaporte, String password){
+		boolean dos = false;
+		for(int i=0;i<cont;i++){
+			if(usuarioList[i].getIdentificador().equals(pasaporte)&&usuarioList[i].getPassword().equals(password)){
+				dos=true;
+			}else{
+				dos=false;
+			}
+		}
+		return dos;
+	}
 	static boolean verificarSoli(String nombre, String password){
 		boolean dos = false;
 		for(int i=0;i<cont2;i++){
@@ -947,6 +958,25 @@ public class Login {
 		}
 		return acceso;
 	}
+	public boolean loginAdmin(String nombre, String password){
+		String name = retornarNombre(nombre);
+		boolean acceso=false;
+		for(int i=0;i<cont;i++){
+			if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
+				acceso=true;
+			}
+		}
+		return acceso;
+	}
+	static String retornarNombre(String pasaporte){
+		String nombre=null;
+		for(int i=0;i<cont;i++){
+			if(usuarioList[i].getIdentificador().equals(pasaporte)){
+				nombre = usuarioList[i].getNombre();
+				}
+			}
+		return nombre;
+	}
 	public String tipoUsuario(String nombre, String password){
 		String rol=null;
 		for(int i=0;i<cont;i++){
@@ -969,14 +999,7 @@ public class Login {
 	        }
 	        return fechaDate;
 	    }
-	public void cargarUsuarios(){
-		usuarioList[cont]=new Usuario("Edson","Administrador","201701029","123",null,"Edson");
-		cont++;
-		/*usuarioList[1]=new Usuario("Arma","Operador","201701029","125",null);
-		usuarioList[2]=new Usuario("Lucia","Cliente","201701029","126",null);*/
-	}
 	public void recorrerLista(){
-
 		for(int i=0;i<cont;i++){
 				System.out.println(usuarioList[i].getNombre());
 		}
@@ -995,20 +1018,6 @@ public class Login {
 		cont--;
 		return result;
 	}
-	public boolean eliminarSolicitudes(int posicion){
-		boolean result = false;
-		for (int i = 0; i < cont2; i++) {
-            if (i== posicion) {
-                for (int j = i; j < cont2 - 1; j++) {
-                    listaSolicitudes[j] = listaSolicitudes[j+1];
-                }
-                listaSolicitudes[cont2 - 1] = null;
-                result = true;
-            }
-        }
-		cont2--;
-		return result;
-	}
 	public void recorrerListaDos(){
 		for(int i=0;i<cont2;i++){
 				System.out.println(listaSolicitudes[i].getNombre());
@@ -1017,9 +1026,6 @@ public class Login {
 	public Usuario[] getUsuarioList() {
 		
 		return usuarioList;
-	}
-	public void setUsuarioList(Usuario[] usuarioList) {
-		this.usuarioList = usuarioList;
 	}
 	public int getCont() {
 		return cont;
@@ -1052,6 +1058,18 @@ public class Login {
 		Login.porcentajeCambio = porcentajeCambio;
 		return Login.porcentajeCambio;
 	}
-	
+	 public static boolean esEntero(String pasaporte) {
+
+	        boolean resultado;
+
+	        try {
+	            Integer.parseInt(pasaporte);
+	            resultado = true;
+	        } catch (NumberFormatException excepcion) {
+	            resultado = false;
+	        }
+
+	        return resultado;
+	    }
 	
 }

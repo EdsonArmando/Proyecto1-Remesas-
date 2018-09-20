@@ -204,9 +204,6 @@ public class RemesasVista {
 		JPanel arriba = new JPanel();
 		String idRemitent=idRemitente(nombre);
 		JFrame uno=new JFrame();
-		JButton agregar;
-		JLabel usuario;
-		JComboBox id;
 		  String[] columns = {"Id", "Emisario", "Beneficiario","Fecha Venta","Hora Venta","Estado"};
 		    Object [][]data = new Object[contReme][6];
 		        for(int i=0;i<contReme;i++){
@@ -344,7 +341,7 @@ public class RemesasVista {
 			}
 			
 		});
-		JLabel label2 = new JLabel("Venta de remesas");
+		JLabel label2 = new JLabel("Pago de remesas");
 	    label2.setFont(new Font("Tahoma",0,35));
 	    arriba.add(label2);
 	    dialogUsuario.add(arriba, BorderLayout.NORTH);
