@@ -47,7 +47,7 @@ public class Login {
 	static RemesasVista reme = new RemesasVista();
 	static String nombre;
 	public void formulario() {
-		usuarioList[0] = new Usuario("Edson","Administrador","Edson","123",null,"Emi");
+		usuarioList[0] = new Usuario("Edson","Administrador","201701029","123",null,"Emi");
 		usuarioList[1] = new Usuario("Emiliana","Operador","254158","125",null,"Emi");
 		JPanel login;
 		JDialog ventanaLogin;
@@ -86,11 +86,11 @@ public class Login {
 				int pass=0;
 				String password,rol;
 				nombre = retornarNombre(user.getText());
+				String nombre2 = user.getText();
 				password = contra.getText();
-				rol=tipoUsuario(nombre,password);
-				nombreUsuario=tipoUsuario(nombre,password);
-				boolean uno = login(nombre,password);
-				boolean dos = loginAdmin(nombre,password);
+				rol=tipoUsuario(nombre2,password);
+				nombreUsuario=tipoUsuario(nombre2,password);
+				boolean uno = login(password,nombre2);
 				if(uno==true&&rol.equals("Administrador")){
 					JOptionPane.showMessageDialog(null, "Bienvenido al sistema");
 					menuAdministrador();
@@ -909,7 +909,7 @@ public class Login {
 			JOptionPane.showMessageDialog(null, "Este usuario ya existe");
 		}else{
 			listaSolicitudes[cont2]=new Usuario(name,rol,id,password,fech,user);
-			JOptionPane.showMessageDialog(null, "El usuario fue ingresado exitosamente");
+			JOptionPane.showMessageDialog(null, "La solicitud fue enviada exitosamente");
 			cont2++;
 		}
 	}
@@ -949,24 +949,47 @@ public class Login {
 	public void logaut(JDialog ventana){
 		ventana.dispose();
 	}
-	public boolean login(String nombre, String password){
+	public boolean login(String password2,String nombre2){
+		String tipo=tipoUsuario(nombre2,password2);
 		boolean acceso=false;
-		for(int i=0;i<cont;i++){
-			if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
-				acceso=true;
+		
+        try{
+		if(tipo.equals("Administrador")){
+			for(int i=0;i<cont;i++){
+				if(usuarioList[i].getNombre().equals(nombre2)&&usuarioList[i].getPassword().equals(password2)){
+					acceso=true;
+				}
 			}
-		}
+		}else if(tipo.equals("Cliente")||tipo.equals("Operador")){
+			for(int i=0;i<cont;i++){
+				if(usuarioList[i].getIdentificador().equals(nombre2)&&usuarioList[i].getPassword().equals(password2)){
+					acceso=true;
+				}
+			}
+		} }
+        catch(NullPointerException e)
+        {
+            System.out.print("NullPointerException caught");
+        }
 		return acceso;
 	}
-	public boolean loginAdmin(String nombre, String password){
-		String name = retornarNombre(nombre);
-		boolean acceso=false;
-		for(int i=0;i<cont;i++){
-			if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
-				acceso=true;
+	public String tipoUsuario(String nombre, String password){
+		boolean dos = esEntero(nombre);
+		String rol=null;
+		if(dos==false){
+			for(int i=0;i<cont;i++){
+				if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
+					rol = usuarioList[i].getRol();
+				}
+			}
+		}else if(dos==true){
+			for(int i=0;i<cont;i++){
+				if(usuarioList[i].getIdentificador().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
+					rol = usuarioList[i].getRol();
+				}
 			}
 		}
-		return acceso;
+		return rol;
 	}
 	static String retornarNombre(String pasaporte){
 		String nombre=null;
@@ -976,15 +999,6 @@ public class Login {
 				}
 			}
 		return nombre;
-	}
-	public String tipoUsuario(String nombre, String password){
-		String rol=null;
-		for(int i=0;i<cont;i++){
-			if(usuarioList[i].getNombre().equals(nombre)&&usuarioList[i].getPassword().equals(password)){
-				rol = usuarioList[i].getRol();
-			}
-		}
-		return rol;
 	}
 	public static Date convertirFecha(String fecha)
 	    {
@@ -1071,5 +1085,4 @@ public class Login {
 
 	        return resultado;
 	    }
-	
 }

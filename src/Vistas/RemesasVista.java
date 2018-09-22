@@ -39,6 +39,7 @@ public class RemesasVista {
 	static Remesa[] listaRemesa = new Remesa[50];
 	JTextField idRemesa=null;
 	double limiteCobro=0.0;
+	double tipoCambio = 0.0;
 	JTextField identificadorRemitente=null,identificadorBeneficiario=null,montoEnviar;
 	public void ventasOperador(){
 		cont = lg.getCont();
@@ -301,6 +302,7 @@ public class RemesasVista {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				limiteCobro = lg.getLimitePago();
+				tipoCambio = lg.getTipoCambio();
 				boolean id=false,beneficiario=false,disponible=false;
 				String idBene=null;
 				int idReme=0;
@@ -319,8 +321,11 @@ public class RemesasVista {
 							JOptionPane.showMessageDialog(null,"Esta remesa ya fue cobrada");
 						}else if(disponible==false){
 							if(beneficiario==true&&id==true&&disponible==false){
+								 if (JOptionPane.showConfirmDialog(null, "El Monto a pagar en Q es: "+(monto*tipoCambio)+"\nEl monto a pagar en $ es: "+monto+", ¿desea continuar?",
+									        "Realizar Venta", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
 								cobrarRemesa(idReme,fechaVenta,nombre);
 								JOptionPane.showMessageDialog(null,"Pago de remesa exitosa");
+								 }
 							}
 						}
 					}else {
@@ -437,11 +442,9 @@ public class RemesasVista {
 	public static int retornarSumaPago(String idRemitentess){
 		int suma=0;
 		for(int i=0;i<contReme;i++){
-			if(listaRemesa[i].isCobrada()==false){
 				if(listaRemesa[i].getRemitente().equals(idRemitentess)){
 					suma +=listaRemesa[i].getMontoEnviar();
 				}
-			}
 		}
 		return suma;
 	}
