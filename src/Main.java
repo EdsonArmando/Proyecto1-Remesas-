@@ -7,29 +7,20 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
-import java.awt.event.*;
-
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import Modelos.Usuario;
 import Vistas.Login;
 public class Main{
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);		
+	static JFrame inicio;
+	public static void main(String[] args) {	
 		Main ma = new Main();
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -62,7 +53,6 @@ public class Main{
 		Icon icono2 = new ImageIcon(logo2.getImage().getScaledInstance(image2.getWidth(), image2.getHeight(), Image.SCALE_DEFAULT));
 		image.setIcon(icono);
 		image2.setIcon(icono2);
-		JFrame inicio;
 		JButton login;
 		JPanel panel1;
 		JLabel titulo;
