@@ -123,6 +123,7 @@ public class Login {
 		ventanaLogin.setSize(300, 150);
 		ventanaLogin.setLocationRelativeTo(null);
 	}
+
 	public void menuAdministrador() {
 		JButton controlUsuarios, configuracion, reportes, salir;
 		JDialog dialog = new JDialog();
@@ -184,6 +185,7 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
+
 	public void reportes() {
 		JButton altas, bajas, aprobar;
 		JDialog dialog = new JDialog();
@@ -209,10 +211,10 @@ public class Login {
 			public void actionPerformed(ActionEvent e) {
 				String pasaporte = JOptionPane.showInputDialog(null, "Ingrese el CUI del usuario: ",
 						JOptionPane.QUESTION_MESSAGE);
-				boolean verificarUser=verificarUsuario(pasaporte);
-				if(verificarUser==true){
+				boolean verificarUser = verificarUsuario(pasaporte);
+				if (verificarUser == true) {
 					reme.reportesCliente(pasaporte);
-				}else{
+				} else {
 					JOptionPane.showMessageDialog(null, "El usuaro No Existe");
 				}
 			}
@@ -236,6 +238,7 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
+
 	public void menuControlUsuarios() {
 		JButton altas, bajas, aprobar;
 		JDialog dialog = new JDialog();
@@ -289,6 +292,7 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
+
 	public void tablaSolicitudUsuarios() {
 		JPanel arriba = new JPanel();
 		JFrame uno = new JFrame();
@@ -327,6 +331,7 @@ public class Login {
 				String identificador = table.getValueAt(row, col).toString();
 				id.addItem(identificador);
 			}
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 			}
@@ -362,6 +367,7 @@ public class Login {
 					}
 				}
 				guardarUsuario(nombre, rol, identificador, password, null, null);
+				uno.dispose();
 			}
 		});
 		pane.setPreferredSize(new Dimension(200, 0));
@@ -371,6 +377,7 @@ public class Login {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
+
 	public void eliminarUsuario() {
 		JPanel arriba = new JPanel();
 		JFrame uno = new JFrame();
@@ -404,7 +411,6 @@ public class Login {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = table.rowAtPoint(e.getPoint());
-
 				int col = table.columnAtPoint(e.getPoint());
 				String identificador = table.getValueAt(row, col).toString();
 				id.addItem(identificador);
@@ -449,6 +455,7 @@ public class Login {
 				} else if (result == false) {
 					JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuaio");
 				}
+				uno.dispose();
 			}
 		});
 		pane.setPreferredSize(new Dimension(200, 0));
@@ -458,6 +465,7 @@ public class Login {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
+
 	public void formularioCrearUsuario() {
 		JPasswordField verificas = null;
 		JTextField ids, nombres, fecha, userss, rols, passwordsa = null;
@@ -533,29 +541,36 @@ public class Login {
 				rol = String.valueOf(roles.getSelectedItem());
 				user = userss.getText();
 				boolean pasaporteUsuario = verificarUsuario(id);
+				boolean userUnico = false;
+				try{
+					 userUnico = verificarNombreUser(user);
+				}catch( java.lang.NullPointerException es){
+					
+				}
 				if (nombreUsuario.equals("Administrador")) {
-					if(nombre.equals("")||id.equals("")||password.equals("")||fecha.getText().equals("")||user.equals("")){
+					if (nombre.equals("") || id.equals("") || password.equals("") || fecha.getText().equals("")
+							|| user.equals("")) {
 						JOptionPane.showMessageDialog(null, "Debe de llenar todos los campos");
-					}else if(id.length()>=9){
-						if(pasaporteUsuario==false){
+					} else if (id.length() >= 9) {
+						if (pasaporteUsuario == false && userUnico == false) {
 							guardarUsuario(nombre, rol, id, password, fech, user);
-						}else{
-							JOptionPane.showMessageDialog(null, "Este pasaporte ya existe en la BD");
+						} else {
+							JOptionPane.showMessageDialog(null, "Este pasaporte o UserName ya existe en la DB");
 						}
-					}else{
+					} else {
 						JOptionPane.showMessageDialog(null, "El pasaporte debe tener por lo menos 9 digitos");
 					}
 				}
 				if (nombreUsuario.equals("Operador")) {
-					if(nombre.equals("")||id.equals("")||password.equals("")){
+					if (nombre.equals("") || id.equals("") || password.equals("")) {
 						JOptionPane.showMessageDialog(null, "Debe de llenar todos los campos");
-					}else if(id.length()>=9){
-						if(pasaporteUsuario==false){
+					} else if (id.length() >= 9) {
+						if (pasaporteUsuario == false) {
 							guardarUsuarioSolicitud(nombre, "Cliente", id, password, null, null);
-						}else{
+						} else {
 							JOptionPane.showMessageDialog(null, "Este pasaporte ya existe en la BD");
 						}
-					}else{
+					} else {
 						JOptionPane.showMessageDialog(null, "El pasaporte debe tener por lo menos 9 digitos");
 					}
 				}
@@ -642,6 +657,7 @@ public class Login {
 		dialogUsuario.setLocationRelativeTo(null);
 
 	}
+
 	public void menuOperador() {
 		JButton registro, ventas, pago, consulta, salir;
 		JDialog dialog = new JDialog();
@@ -679,7 +695,14 @@ public class Login {
 		consulta.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				reme.consultaRemesa();
+				String pasaporte = JOptionPane.showInputDialog(null, "Ingrese el Pasaporte del usuario: ",
+						JOptionPane.QUESTION_MESSAGE);
+				boolean verificarUser = verificarUsuario(pasaporte);
+				if (verificarUser == true) {
+					reme.reportesCliente(pasaporte);
+				} else {
+					JOptionPane.showMessageDialog(null, "El usuaro No Existe");
+				}
 			}
 		});
 		salir = new JButton("Salir");
@@ -711,6 +734,7 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
+
 	public void menuCliente() {
 		JButton remesasCobradas, remesasCompradas, salir;
 		JDialog dialog = new JDialog();
@@ -764,6 +788,7 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
+
 	public void configuracionDatosRemesas() {
 		JTextField limiteCompras, limitePagos, tipoCambios, porcentajeGanancias;
 		JPanel arriba = new JPanel();
@@ -838,6 +863,7 @@ public class Login {
 		dialogUsuario.setVisible(true);
 		dialogUsuario.setLocationRelativeTo(null);
 	}
+
 	public void cargaMasiva() {
 		JPanel arriba = new JPanel();
 		try {
@@ -867,6 +893,7 @@ public class Login {
 			JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña");
 		}
 	}
+
 	static void leerLineas(String superTexto) {
 		String nombre = null, identificador = null, rol = null, contraseña = null, user = null;
 		Date fech = null;
@@ -900,18 +927,14 @@ public class Login {
 					}
 				}
 			}
-			boolean verificarPass=verificarUsuario(identificador);
-			if(verificarPass==false){
-				if(identificador.length()>=9){
-					guardarUsuario(nombre, rol, identificador, contraseña, fech, user);
-				}else{
-					JOptionPane.showMessageDialog(null, "El pasaporte debe tener al menos 9 digitos");
-				}
-			}else{
-				JOptionPane.showMessageDialog(null, "Este pasaporte ya existe dentro de la BD");
+			if (identificador.length() >= 9) {
+				guardarUsuario(nombre, rol, identificador, contraseña, fech, user);
+			} else {
+				JOptionPane.showMessageDialog(null, "El pasaporte debe tener al menos 9 digitos");
 			}
 		}
 	}
+
 	static void guardarUsuario(String name, String rol, String id, String password, Date fech, String user) {
 		boolean dos = verificarUse(name, password);
 		if (dos == true) {
@@ -922,6 +945,7 @@ public class Login {
 			cont++;
 		}
 	}
+
 	static void guardarUsuarioSolicitud(String name, String rol, String id, String password, Date fech, String user) {
 		boolean dos = verificarSoli(name, password);
 		if (dos == true) {
@@ -932,6 +956,7 @@ public class Login {
 			cont2++;
 		}
 	}
+
 	static boolean verificarUse(String nombre, String password) {
 		boolean dos = false;
 		for (int i = 0; i < cont; i++) {
@@ -943,6 +968,7 @@ public class Login {
 		}
 		return dos;
 	}
+
 	static boolean verificarUser(String pasaporte, String password) {
 		boolean dos = false;
 		for (int i = 0; i < cont; i++) {
@@ -954,6 +980,7 @@ public class Login {
 		}
 		return dos;
 	}
+
 	static boolean verificarSoli(String nombre, String password) {
 		boolean dos = false;
 		for (int i = 0; i < cont2; i++) {
@@ -965,9 +992,11 @@ public class Login {
 		}
 		return dos;
 	}
+
 	public void logaut(JDialog ventana) {
 		ventana.dispose();
 	}
+
 	public boolean login(String password2, String nombre2) {
 		String tipo = tipoUsuario(nombre2, password2);
 		boolean acceso = false;
@@ -991,6 +1020,7 @@ public class Login {
 		}
 		return acceso;
 	}
+
 	public String tipoUsuario(String nombre, String password) {
 		boolean dos = esEntero(nombre);
 		String rol = null;
@@ -1009,6 +1039,7 @@ public class Login {
 		}
 		return rol;
 	}
+
 	static String retornarNombre(String pasaporte) {
 		String nombre = null;
 		for (int i = 0; i < cont; i++) {
@@ -1018,6 +1049,7 @@ public class Login {
 		}
 		return nombre;
 	}
+
 	public static Date convertirFecha(String fecha) {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 		Date fechaDate = null;
@@ -1028,11 +1060,13 @@ public class Login {
 		}
 		return fechaDate;
 	}
+
 	public void recorrerLista() {
 		for (int i = 0; i < cont; i++) {
 			System.out.println(usuarioList[i].getNombre());
 		}
 	}
+
 	public boolean eliminarUsuarios(int posicion) {
 		boolean result = false;
 		for (int i = 0; i < cont; i++) {
@@ -1047,46 +1081,58 @@ public class Login {
 		cont--;
 		return result;
 	}
+
 	public void recorrerListaDos() {
 		for (int i = 0; i < cont2; i++) {
 			System.out.println(listaSolicitudes[i].getNombre());
 		}
 	}
+
 	public Usuario[] getUsuarioList() {
 
 		return usuarioList;
 	}
+
 	public int getCont() {
 		return cont;
 	}
+
 	public static double getLimiteCompra() {
 		return limiteCompra;
 	}
+
 	public static double setLimiteCompra(double limiteCompra) {
 		Login.limiteCompra = limiteCompra;
 		return Login.limiteCompra;
 	}
+
 	public static double getLimitePago() {
 		return limitePago;
 	}
+
 	public static double setLimitePago(double limitePago) {
 		Login.limitePago = limitePago;
 		return Login.limitePago;
 	}
+
 	public static double getTipoCambio() {
 		return tipoCambio;
 	}
+
 	public static double setTipoCambio(double tipoCambio) {
 		Login.tipoCambio = tipoCambio;
 		return Login.tipoCambio;
 	}
+
 	public static double getPorcentajeCambio() {
 		return porcentajeCambio;
 	}
+
 	public static double setPorcentajeCambio(double porcentajeCambio) {
 		Login.porcentajeCambio = porcentajeCambio;
 		return Login.porcentajeCambio;
 	}
+
 	public static boolean esEntero(String pasaporte) {
 		boolean resultado;
 		try {
@@ -1097,10 +1143,23 @@ public class Login {
 		}
 		return resultado;
 	}
-	static boolean verificarUsuario(String pasaporte1){
-		boolean pasaporte=false;
-		for(int i=0;i<cont;i++){
-			if(usuarioList[i].getIdentificador().equals(pasaporte1)){
+
+	static boolean verificarUsuario(String pasaporte1) {
+		boolean pasaporte = false;
+		for (int i = 0; i < cont; i++) {
+			if(usuarioList[i].getRol().equals("Cliente")){
+				if (usuarioList[i].getIdentificador().equals(pasaporte1)) {
+					pasaporte = true;
+				}
+			}
+		}
+		return pasaporte;
+	}
+
+	static boolean verificarNombreUser(String user) {
+		boolean pasaporte = false;
+		for (int i = 0; i < cont; i++) {
+			if (usuarioList[i].getUsername().equals(user)) {
 				pasaporte = true;
 			}
 		}

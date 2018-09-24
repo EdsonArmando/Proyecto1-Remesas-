@@ -36,6 +36,7 @@ public class RemesasVista {
 	double limiteCobro = 0.0;
 	double tipoCambio = 0.0;
 	JTextField identificadorRemitente = null, identificadorBeneficiario = null, montoEnviar;
+
 	public void ventasOperador() {
 		cont = lg.getCont();
 		JPanel arriba = new JPanel();
@@ -71,26 +72,27 @@ public class RemesasVista {
 				Date fechaVenta = new Date();
 				idRemi = identificadorRemitente.getText();
 				idBene = identificadorBeneficiario.getText();
-				try{
+				try {
 					monto = Double.parseDouble(montoEnviar.getText());
-				}catch( NumberFormatException es){
-					
+				} catch (NumberFormatException es) {
+
 				}
 				costo = (monto * porcentajess) + monto;
 				remi = verificarRemitente(idRemi);
 				bene = verificarBeneficiario(idBene);
 				double suma = retornarSumaPago(idRemi);
-				if(idRemi.equals("")||idBene.equals("")||montoEnviar.getText().equals("")){
+				if (idRemi.equals("") || idBene.equals("") || montoEnviar.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
-				}else{
+				} else {
 					if ((suma + monto) <= limiteVentas) {
 						if (idRemi.equals(idBene)) {
 							JOptionPane.showMessageDialog(null, "No puede introducir dos pasaportes iguales");
 						} else if (idRemi != idBene) {
 							if (remi && bene == true) {
 								if (JOptionPane.showConfirmDialog(null,
-										"El costo de la remesa en $ es: " + costo + ", ¿desea continuar?", "Realizar Venta",
-										JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+										"El costo de la remesa en $ es: " + costo + ", ¿desea continuar?",
+										"Realizar Venta", JOptionPane.WARNING_MESSAGE,
+										JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 									ventaRemesa(idRemi, idBene, monto, fechaVenta, costo, cobrada, fechaPago);
 									contReme++;
 									id++;
@@ -138,6 +140,7 @@ public class RemesasVista {
 		dialogUsuario.setVisible(true);
 
 	}
+
 	public boolean verificarRemitente(String idRemitente) {
 		boolean verificar = false;
 		for (int i = 0; i < cont; i++) {
@@ -149,12 +152,14 @@ public class RemesasVista {
 		}
 		return verificar;
 	}
+
 	public static void ventaRemesa(String remitente, String beneficiario, double montoEnviar, Date fechaVenta,
 			double costo, boolean cobrada, Date fechaPago) {
 		listaRemesa[contReme] = new Remesa(id, remitente, beneficiario, montoEnviar, fechaVenta, costo, cobrada,
 				fechaPago);
 	}
-	public static void consultaRemesa() {
+
+	public static void consultaRemesa(String nombre2) {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		JPanel arriba = new JPanel();
@@ -192,6 +197,7 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
+
 	public void recorrerListaRemesas(String idBene) {
 		for (int j = 0; j < cont; j++) {
 			for (int i = 0; i < contReme; i++) {
@@ -206,6 +212,7 @@ public class RemesasVista {
 		}
 
 	}
+
 	public void consultaRemesaClienteComprada(String nombre) {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -244,6 +251,7 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
+
 	public void consultaRemesaClienteCobradas(String nombre) {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -284,10 +292,11 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
+
 	public void cobrarRemesa(String nombre) {
 		JPanel arriba = new JPanel();
 		JDialog dialogUsuario = new JDialog();
-		JButton agregar, cancelar;
+		JButton agregar, cancelar,remesa;
 		JPanel panelUsuario = new JPanel();
 		panelUsuario.setLayout(null);
 		JLabel idRemesas, identificadorBeneficiarios;
@@ -310,10 +319,10 @@ public class RemesasVista {
 				String idBene = null;
 				int idReme = 0;
 				Date fechaVenta = new Date();
-				try{
+				try {
 					idReme = Integer.parseInt(idRemesa.getText());
-				}catch(NumberFormatException ex){
-					
+				} catch (NumberFormatException ex) {
+
 				}
 				idBene = identificadorBeneficiario.getText();
 				beneficiario = verificarBeneficiarioRemesa(idBene);
@@ -321,9 +330,9 @@ public class RemesasVista {
 				disponible = verificarDisponibilidad(idReme);
 				double monto = obtenerMonto(idReme);
 				double sumar = retornarSumaCobro(idBene);
-				if(idRemesa.getText().equals("")||idBene.equals("")){
+				if (idRemesa.getText().equals("") || idBene.equals("")) {
 					JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
-				}else{
+				} else {
 					if ((monto + sumar) <= limiteCobro) {
 						if (id && beneficiario == true) {
 							if (disponible == true) {
@@ -332,7 +341,8 @@ public class RemesasVista {
 								if (beneficiario == true && id == true && disponible == false) {
 									if (JOptionPane.showConfirmDialog(null,
 											"El Monto a pagar en Q es: " + (monto * tipoCambio)
-													+ "\nEl monto a pagar en $ es: " + monto + "\n¿Desea continuar?",
+													+ "\nEl monto a pagar en $ es: " + monto
+													+ "\nEl Operdor que aprobo es: " + nombre + "\n¿Desea continuar?",
 											"Realizar Venta", JOptionPane.WARNING_MESSAGE,
 											JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 										cobrarRemesa(idReme, fechaVenta, nombre);
@@ -359,34 +369,54 @@ public class RemesasVista {
 			}
 
 		});
+		remesa = new JButton("Remesa");
+		remesa.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String idRemesa = JOptionPane.showInputDialog(null, "Ingrese el No.Remesa: ",
+						JOptionPane.QUESTION_MESSAGE);
+				try{
+					int id = Integer.parseInt(idRemesa);
+				}catch(NumberFormatException ex){
+					JOptionPane.showMessageDialog(null, "Ingrese un número válido");
+				}
+				boolean verificarRemesa = verificarIdRemesa(id);
+				if (verificarRemesa == true) {
+					datosRemesa(id);
+				} else {
+					JOptionPane.showMessageDialog(null, "La Remesa No Existe");
+				}
+			}
+		});
 		JLabel label2 = new JLabel("Pago de remesas");
 		label2.setFont(new Font("Tahoma", 0, 35));
 		arriba.add(label2);
 		dialogUsuario.add(arriba, BorderLayout.NORTH);
 		agregar.setBounds(10, 80, 95, 20);
-		cancelar.setBounds(150, 80, 80, 20);
+		cancelar.setBounds(105, 80, 80, 20);
+		remesa.setBounds(185, 80, 80, 20);
 		panelUsuario.add(idRemesa);
 		panelUsuario.add(cancelar);
 		panelUsuario.add(identificadorBeneficiario);
 		panelUsuario.add(identificadorBeneficiarios);
 		panelUsuario.add(idRemesas);
 		panelUsuario.add(agregar);
+		panelUsuario.add(remesa);
 		dialogUsuario.add(panelUsuario);
 		dialogUsuario.setLocationRelativeTo(null);
 		dialogUsuario.setSize(400, 400);
 		dialogUsuario.setVisible(true);
 	}
-
+	
 	public static void Reportes() {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		JPanel arriba = new JPanel();
 		JFrame uno = new JFrame();
-		String[] columns = { "Total remesas vendidas($)", "Total remesas Pagadas($)","Remesas por pagar", "Ganancia total($)"};
+		String[] columns = { "Total remesas vendidas($)", "Total remesas Pagadas($)", "Remesas por pagar",
+				"Ganancia total($)" };
 		Object[][] data = {
-			    {obtenerSumaRemesasVendidas(), obtenerRemesasPagadas(),
-			    	pendientesPorPagar(), gananciaTotal()},
-			};
+				{ obtenerSumaRemesasVendidas(), obtenerRemesasPagadas(), pendientesPorPagar(), gananciaTotal() }, };
 		JTable table = new JTable(data, columns);
 		JScrollPane scrollPane = new JScrollPane(table);
 		uno.add(scrollPane, BorderLayout.CENTER);
@@ -398,34 +428,37 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
-	public  void reportesCliente(String nombre2) {
+
+	public void reportesCliente(String nombre2) {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		JPanel arriba = new JPanel();
 		JFrame uno = new JFrame();
 		String[] columns = { "Id", "Emisario", "Beneficiario", "Fecha Venta", "Hora Venta", "Estado", "Fecha Cobro",
-				"Hora Cobro" };
-		Object[][] data = new Object[contReme][8];
+				"Hora Cobro" ,"Monto en $","Usuario Aprobo"};
+		Object[][] data = new Object[contReme][10];
 		for (int i = 0; i < contReme; i++) {
-			if (listaRemesa[i].getBeneficiario().equals(nombre2)||listaRemesa[i].getRemitente().equals(nombre2)) {
-					try {
-						data[i][0] = listaRemesa[i].getId();
-						data[i][1] = listaRemesa[i].getRemitente();
-						data[i][2] = listaRemesa[i].getBeneficiario();
-						data[i][3] = dateFormat.format(listaRemesa[i].getFechaVenta());
-						data[i][4] = hourFormat.format(listaRemesa[i].getFechaVenta());
-						if (listaRemesa[i].isCobrada() == false) {
-							data[i][5] = "Sin cancelar";
-						} else if (listaRemesa[i].isCobrada() == true) {
-							data[i][5] = "pagada";
-						}
-						data[i][6] = dateFormat.format(listaRemesa[i].getFechaPago());
-						data[i][7] = hourFormat.format(listaRemesa[i].getFechaPago());
-					} catch (NullPointerException e) {
-						System.out.print("NullPointerException caught");
+			if (listaRemesa[i].getBeneficiario().equals(nombre2) || listaRemesa[i].getRemitente().equals(nombre2)) {
+				try {
+					data[i][0] = listaRemesa[i].getId();
+					data[i][1] = listaRemesa[i].getRemitente();
+					data[i][2] = listaRemesa[i].getBeneficiario();
+					data[i][3] = dateFormat.format(listaRemesa[i].getFechaVenta());
+					data[i][4] = hourFormat.format(listaRemesa[i].getFechaVenta());
+					if (listaRemesa[i].isCobrada() == false) {
+						data[i][5] = "Sin cancelar";
+					} else if (listaRemesa[i].isCobrada() == true) {
+						data[i][5] = "pagada";
 					}
+					data[i][6] = dateFormat.format(listaRemesa[i].getFechaPago());
+					data[i][7] = hourFormat.format(listaRemesa[i].getFechaPago());
+					data[i][8] = listaRemesa[i].getMontoEnviar();
+					data[i][9] = listaRemesa[i].getUserAprobo();
+				} catch (NullPointerException e) {
+					System.out.print("NullPointerException caught");
 				}
 			}
+		}
 
 		JTable table = new JTable(data, columns);
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -438,39 +471,79 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
-	static double obtenerSumaRemesasVendidas(){
-		double suma =0;
-		for(int i=0;i<contReme;i++){
-			suma +=listaRemesa[i].getMontoEnviar();
+	public void datosRemesa(int idRemesa) {
+		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		JPanel arriba = new JPanel();
+		JFrame uno = new JFrame();
+		String[] columns = { "Id", "Emisario", "Beneficiario", "Estado","Monto en $"};
+		Object[][] data = new Object[contReme][10];
+		for (int i = 0; i < contReme; i++) {
+			if (listaRemesa[i].getId()==idRemesa) {
+				try {
+					data[i][0] = listaRemesa[i].getId();
+					data[i][1] = listaRemesa[i].getRemitente();
+					data[i][2] = listaRemesa[i].getBeneficiario();
+					if (listaRemesa[i].isCobrada() == false) {
+						data[i][3] = "Sin cancelar";
+					} else if (listaRemesa[i].isCobrada() == true) {
+						data[i][3] = "pagada";
+					}
+					data[i][4] = listaRemesa[i].getMontoEnviar();
+				} catch (NullPointerException e) {
+					System.out.print("NullPointerException caught");
+				}
+			}
+		}
+
+		JTable table = new JTable(data, columns);
+		JScrollPane scrollPane = new JScrollPane(table);
+		uno.add(scrollPane, BorderLayout.CENTER);
+		JLabel label2 = new JLabel("Consulta de Remesas");
+		label2.setFont(new Font("Tahoma", 0, 35));
+		arriba.add(label2);
+		uno.add(arriba, BorderLayout.NORTH);
+		uno.setSize(600, 400);
+		uno.setLocationRelativeTo(null);
+		uno.setVisible(true);
+	}
+	static double obtenerSumaRemesasVendidas() {
+		double suma = 0;
+		for (int i = 0; i < contReme; i++) {
+			suma += listaRemesa[i].getMontoEnviar();
 		}
 		return suma;
 	}
-	static double obtenerRemesasPagadas(){
-		double suma =0;
-		for(int i=0;i<contReme;i++){
-			if(listaRemesa[i].isCobrada()==true){
-				suma +=listaRemesa[i].getMontoEnviar();
+
+	static double obtenerRemesasPagadas() {
+		double suma = 0;
+		for (int i = 0; i < contReme; i++) {
+			if (listaRemesa[i].isCobrada() == true) {
+				suma += listaRemesa[i].getMontoEnviar();
 			}
 		}
 		return suma;
 	}
-	static double gananciaTotal(){
-		double suma =0;
-		for(int i=0;i<contReme;i++){
-				suma +=listaRemesa[i].getCosto();
+
+	static double gananciaTotal() {
+		double suma = 0;
+		for (int i = 0; i < contReme; i++) {
+			suma += listaRemesa[i].getCosto();
 		}
 		return suma;
 	}
-	static int pendientesPorPagar(){
-		int suma =0;
-		for(int i=0;i<contReme;i++){
-			if(listaRemesa[i].isCobrada()==false){
+
+	static int pendientesPorPagar() {
+		int suma = 0;
+		for (int i = 0; i < contReme; i++) {
+			if (listaRemesa[i].isCobrada() == false) {
 				int myInt = listaRemesa[i].isCobrada() ? 0 : 1;
-				suma +=myInt;
+				suma += myInt;
 			}
 		}
 		return suma;
 	}
+
 	public void cobrarRemesa(int idRemesa, Date fechaPagoss, String userAprobo) {
 		for (int i = 0; i < contReme; i++) {
 			if (listaRemesa[i].getId() == idRemesa) {
@@ -561,7 +634,15 @@ public class RemesasVista {
 		}
 		return suma;
 	}
-
+	public boolean verificarIdRemesa(int idRemesa) {
+		boolean verificar = false;
+		for (int i = 0; i < contReme; i++) {
+			if (listaRemesa[i].getId()==idRemesa) {
+				verificar = true;
+			}
+		}
+		return verificar;
+	}
 	public boolean verificarBeneficiarioRemesa(String idBeneficiario) {
 		boolean verificar = false;
 		for (int i = 0; i < contReme; i++) {
