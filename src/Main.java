@@ -20,6 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import Vistas.Login;
 public class Main{
 	static JFrame inicio;
+	Login log = new Login();
 	public static void main(String[] args) {	
 		Main ma = new Main();
 		try {
@@ -80,7 +81,6 @@ public class Main{
 		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Login log = new Login();
 				log.formulario();
 				log.recorrerLista();
 			}
