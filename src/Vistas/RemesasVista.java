@@ -36,7 +36,6 @@ public class RemesasVista {
 	double limiteCobro = 0.0;
 	double tipoCambio = 0.0;
 	JTextField identificadorRemitente = null, identificadorBeneficiario = null, montoEnviar;
-
 	public void ventasOperador() {
 		cont = lg.getCont();
 		JPanel arriba = new JPanel();
@@ -72,33 +71,41 @@ public class RemesasVista {
 				Date fechaVenta = new Date();
 				idRemi = identificadorRemitente.getText();
 				idBene = identificadorBeneficiario.getText();
-				monto = Double.parseDouble(montoEnviar.getText());
+				try{
+					monto = Double.parseDouble(montoEnviar.getText());
+				}catch( NumberFormatException es){
+					
+				}
 				costo = (monto * porcentajess) + monto;
 				remi = verificarRemitente(idRemi);
 				bene = verificarBeneficiario(idBene);
 				double suma = retornarSumaPago(idRemi);
-				if ((suma + monto) <= limiteVentas) {
-					if (idRemi.equals(idBene)) {
-						JOptionPane.showMessageDialog(null, "No puede introducir dos pasaportes iguales");
-					} else if (idRemi != idBene) {
-						if (remi && bene == true) {
-							if (JOptionPane.showConfirmDialog(null,
-									"El costo de la remesa en $ es: " + costo + ", ¿desea continuar?", "Realizar Venta",
-									JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-								ventaRemesa(idRemi, idBene, monto, fechaVenta, costo, cobrada, fechaPago);
-								contReme++;
-								id++;
-								recorrerListaRemesas(idBene);
+				if(idRemi.equals("")||idBene.equals("")||montoEnviar.getText().equals("")){
+					JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
+				}else{
+					if ((suma + monto) <= limiteVentas) {
+						if (idRemi.equals(idBene)) {
+							JOptionPane.showMessageDialog(null, "No puede introducir dos pasaportes iguales");
+						} else if (idRemi != idBene) {
+							if (remi && bene == true) {
+								if (JOptionPane.showConfirmDialog(null,
+										"El costo de la remesa en $ es: " + costo + ", ¿desea continuar?", "Realizar Venta",
+										JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+									ventaRemesa(idRemi, idBene, monto, fechaVenta, costo, cobrada, fechaPago);
+									contReme++;
+									id++;
+									JOptionPane.showMessageDialog(null, "Venta Remesa Exitosa");
+									recorrerListaRemesas(idBene);
+								}
+
+							} else {
+								JOptionPane.showMessageDialog(null, "Los pasaportes son inválidos");
 							}
-
-						} else {
-							JOptionPane.showMessageDialog(null, "Los pasaportes son inválidos");
 						}
+					} else {
+						JOptionPane.showMessageDialog(null, "No puede enviar más de: " + limiteVentas);
 					}
-				} else {
-					JOptionPane.showMessageDialog(null, "No puede enviar más de: " + limiteVentas);
 				}
-
 			}
 
 		});
@@ -131,7 +138,6 @@ public class RemesasVista {
 		dialogUsuario.setVisible(true);
 
 	}
-
 	public boolean verificarRemitente(String idRemitente) {
 		boolean verificar = false;
 		for (int i = 0; i < cont; i++) {
@@ -143,13 +149,11 @@ public class RemesasVista {
 		}
 		return verificar;
 	}
-
 	public static void ventaRemesa(String remitente, String beneficiario, double montoEnviar, Date fechaVenta,
 			double costo, boolean cobrada, Date fechaPago) {
 		listaRemesa[contReme] = new Remesa(id, remitente, beneficiario, montoEnviar, fechaVenta, costo, cobrada,
 				fechaPago);
 	}
-
 	public static void consultaRemesa() {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -159,7 +163,6 @@ public class RemesasVista {
 				"Hora Cobro", "Operador Aprobo" };
 		Object[][] data = new Object[contReme][9];
 		for (int i = 0; i < contReme; i++) {
-
 			try {
 				data[i][0] = listaRemesa[i].getId();
 				data[i][1] = listaRemesa[i].getRemitente();
@@ -189,7 +192,6 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
-
 	public void recorrerListaRemesas(String idBene) {
 		for (int j = 0; j < cont; j++) {
 			for (int i = 0; i < contReme; i++) {
@@ -204,7 +206,6 @@ public class RemesasVista {
 		}
 
 	}
-
 	public void consultaRemesaClienteComprada(String nombre) {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -232,7 +233,6 @@ public class RemesasVista {
 				}
 			}
 		}
-
 		JTable table = new JTable(data, columns);
 		JScrollPane scrollPane = new JScrollPane(table);
 		uno.add(scrollPane, BorderLayout.CENTER);
@@ -244,7 +244,6 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
-
 	public void consultaRemesaClienteCobradas(String nombre) {
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -274,7 +273,6 @@ public class RemesasVista {
 				}
 			}
 		}
-
 		JTable table = new JTable(data, columns);
 		JScrollPane scrollPane = new JScrollPane(table);
 		uno.add(scrollPane, BorderLayout.CENTER);
@@ -286,7 +284,6 @@ public class RemesasVista {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
-
 	public void cobrarRemesa(String nombre) {
 		JPanel arriba = new JPanel();
 		JDialog dialogUsuario = new JDialog();
@@ -313,35 +310,43 @@ public class RemesasVista {
 				String idBene = null;
 				int idReme = 0;
 				Date fechaVenta = new Date();
-				idReme = Integer.parseInt(idRemesa.getText());
+				try{
+					idReme = Integer.parseInt(idRemesa.getText());
+				}catch(NumberFormatException ex){
+					
+				}
 				idBene = identificadorBeneficiario.getText();
 				beneficiario = verificarBeneficiarioRemesa(idBene);
 				id = verificarRemesa(idReme);
 				disponible = verificarDisponibilidad(idReme);
 				double monto = obtenerMonto(idReme);
 				double sumar = retornarSumaCobro(idBene);
-				if ((monto + sumar) <= limiteCobro) {
-					if (id && beneficiario == true) {
-						if (disponible == true) {
-							JOptionPane.showMessageDialog(null, "Esta remesa ya fue cobrada");
-						} else if (disponible == false) {
-							if (beneficiario == true && id == true && disponible == false) {
-								if (JOptionPane.showConfirmDialog(null,
-										"El Monto a pagar en Q es: " + (monto * tipoCambio)
-												+ "\nEl monto a pagar en $ es: " + monto + "\n¿Desea continuar?",
-										"Realizar Venta", JOptionPane.WARNING_MESSAGE,
-										JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-									cobrarRemesa(idReme, fechaVenta, nombre);
-									JOptionPane.showMessageDialog(null, "Pago de remesa exitosa");
+				if(idRemesa.getText().equals("")||idBene.equals("")){
+					JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
+				}else{
+					if ((monto + sumar) <= limiteCobro) {
+						if (id && beneficiario == true) {
+							if (disponible == true) {
+								JOptionPane.showMessageDialog(null, "Esta remesa ya fue cobrada");
+							} else if (disponible == false) {
+								if (beneficiario == true && id == true && disponible == false) {
+									if (JOptionPane.showConfirmDialog(null,
+											"El Monto a pagar en Q es: " + (monto * tipoCambio)
+													+ "\nEl monto a pagar en $ es: " + monto + "\n¿Desea continuar?",
+											"Realizar Venta", JOptionPane.WARNING_MESSAGE,
+											JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+										cobrarRemesa(idReme, fechaVenta, nombre);
+										JOptionPane.showMessageDialog(null, "Pago de remesa exitosa");
+									}
 								}
 							}
+						} else {
+							JOptionPane.showMessageDialog(null, "Datos Incorrectos");
 						}
-					} else {
-						JOptionPane.showMessageDialog(null, "Datos Incorrectos");
-					}
 
-				} else {
-					JOptionPane.showMessageDialog(null, "No puede cobrar mas de: " + limiteCobro);
+					} else {
+						JOptionPane.showMessageDialog(null, "No puede cobrar mas de: " + limiteCobro);
+					}
 				}
 			}
 		});

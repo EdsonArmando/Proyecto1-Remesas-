@@ -70,16 +70,13 @@ public class Login {
 		contra.setBounds(100, 50, 80, 20);
 		cancelar = new JButton("Cancelar");
 		cancelar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ventanaLogin.dispose();
 			}
-
 		});
 		aceptar = new JButton("Aceptar");
 		aceptar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String password, rol;
@@ -110,7 +107,6 @@ public class Login {
 				}
 
 			}
-
 		});
 		aceptar.setBounds(200, 20, 80, 20);
 		cancelar.setBounds(200, 50, 80, 20);
@@ -126,9 +122,7 @@ public class Login {
 		ventanaLogin.setVisible(true);
 		ventanaLogin.setSize(300, 150);
 		ventanaLogin.setLocationRelativeTo(null);
-
 	}
-
 	public void menuAdministrador() {
 		JButton controlUsuarios, configuracion, reportes, salir;
 		JDialog dialog = new JDialog();
@@ -143,30 +137,24 @@ public class Login {
 		arriba.add(label2);
 		controlUsuarios = new JButton("Control de Usuarios");
 		controlUsuarios.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menuControlUsuarios();
 			}
-
 		});
 		configuracion = new JButton("Configuración");
 		configuracion.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				configuracionDatosRemesas();
 			}
-
 		});
 		reportes = new JButton("Reportes");
 		reportes.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reportes();
 			}
-
 		});
 		salir = new JButton("Logaut");
 		salir.addActionListener(new ActionListener() {
@@ -174,7 +162,6 @@ public class Login {
 			public void actionPerformed(ActionEvent e) {
 				logaut(dialog);
 			}
-
 		});
 		panelAbajo.setPreferredSize(new Dimension(55, 0));
 		panelIzquierdo.add(controlUsuarios);
@@ -197,7 +184,6 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
-
 	public void reportes() {
 		JButton altas, bajas, aprobar;
 		JDialog dialog = new JDialog();
@@ -212,25 +198,24 @@ public class Login {
 		arriba.add(label2);
 		altas = new JButton("Reporte General");
 		altas.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reme.Reportes();
 			}
-
 		});
 		aprobar = new JButton("Reporte Cliente");
 		aprobar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String pasaporte = JOptionPane.showInputDialog(null,
-						"Ingrese el CUI del usuario: ",
+				String pasaporte = JOptionPane.showInputDialog(null, "Ingrese el CUI del usuario: ",
 						JOptionPane.QUESTION_MESSAGE);
-				reme.reportesCliente(pasaporte);
-				System.out.println(pasaporte);
+				boolean verificarUser=verificarUsuario(pasaporte);
+				if(verificarUser==true){
+					reme.reportesCliente(pasaporte);
+				}else{
+					JOptionPane.showMessageDialog(null, "El usuaro No Existe");
+				}
 			}
-
 		});
 		panelAbajo.setPreferredSize(new Dimension(55, 0));
 		panelIzquierdo.add(altas);
@@ -251,7 +236,6 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
-
 	public void menuControlUsuarios() {
 		JButton altas, bajas, aprobar;
 		JDialog dialog = new JDialog();
@@ -266,30 +250,24 @@ public class Login {
 		arriba.add(label2);
 		altas = new JButton("Crear Usuario");
 		altas.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				formularioCrearUsuario();
 			}
-
 		});
 		bajas = new JButton("EliminarUsuario");
 		bajas.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				eliminarUsuario();
 			}
-
 		});
 		aprobar = new JButton("Aprobar Usuario");
 		aprobar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				tablaSolicitudUsuarios();
 			}
-
 		});
 		panelAbajo.setPreferredSize(new Dimension(55, 0));
 		panelIzquierdo.add(altas);
@@ -311,7 +289,6 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
-
 	public void tablaSolicitudUsuarios() {
 		JPanel arriba = new JPanel();
 		JFrame uno = new JFrame();
@@ -332,7 +309,6 @@ public class Login {
 			}
 		}
 		JTable table = new JTable(data, columns);
-
 		JScrollPane scrollPane = new JScrollPane(table);
 		uno.add(scrollPane, BorderLayout.CENTER);
 		JLabel label2 = new JLabel("Solicitud de Usuarios");
@@ -343,7 +319,6 @@ public class Login {
 		pane.add(id = new JComboBox());
 		pane.add(agregar = new JButton("Aceptar"));
 		table.addMouseListener(new MouseListener() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = table.rowAtPoint(e.getPoint());
@@ -352,10 +327,8 @@ public class Login {
 				String identificador = table.getValueAt(row, col).toString();
 				id.addItem(identificador);
 			}
-
 			@Override
 			public void mousePressed(MouseEvent e) {
-
 			}
 
 			@Override
@@ -373,10 +346,8 @@ public class Login {
 				// TODO Auto-generated method stub
 
 			}
-
 		});
 		agregar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String nombre = null, rol = null, identificador = null, password = null;
@@ -392,7 +363,6 @@ public class Login {
 				}
 				guardarUsuario(nombre, rol, identificador, password, null, null);
 			}
-
 		});
 		pane.setPreferredSize(new Dimension(200, 0));
 		uno.add(pane, BorderLayout.WEST);
@@ -401,7 +371,6 @@ public class Login {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
-
 	public void eliminarUsuario() {
 		JPanel arriba = new JPanel();
 		JFrame uno = new JFrame();
@@ -422,7 +391,6 @@ public class Login {
 			}
 		}
 		JTable table = new JTable(data, columns);
-
 		JScrollPane scrollPane = new JScrollPane(table);
 		uno.add(scrollPane, BorderLayout.CENTER);
 		JLabel label2 = new JLabel("Eliminar Usuario");
@@ -433,7 +401,6 @@ public class Login {
 		pane.add(id = new JComboBox());
 		pane.add(agregar = new JButton("Aceptar"));
 		table.addMouseListener(new MouseListener() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = table.rowAtPoint(e.getPoint());
@@ -466,7 +433,6 @@ public class Login {
 
 		});
 		agregar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String identificador = null;
@@ -483,9 +449,7 @@ public class Login {
 				} else if (result == false) {
 					JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuaio");
 				}
-
 			}
-
 		});
 		pane.setPreferredSize(new Dimension(200, 0));
 		uno.add(pane, BorderLayout.WEST);
@@ -494,7 +458,6 @@ public class Login {
 		uno.setLocationRelativeTo(null);
 		uno.setVisible(true);
 	}
-
 	public void formularioCrearUsuario() {
 		JPasswordField verificas = null;
 		JTextField ids, nombres, fecha, userss, rols, passwordsa = null;
@@ -569,37 +532,50 @@ public class Login {
 				password = contraseña.getText();
 				rol = String.valueOf(roles.getSelectedItem());
 				user = userss.getText();
-				boolean dos = false;
+				boolean pasaporteUsuario = verificarUsuario(id);
 				if (nombreUsuario.equals("Administrador")) {
-					guardarUsuario(nombre, rol, id, password, fech, user);
+					if(nombre.equals("")||id.equals("")||password.equals("")||fecha.getText().equals("")||user.equals("")){
+						JOptionPane.showMessageDialog(null, "Debe de llenar todos los campos");
+					}else if(id.length()>=9){
+						if(pasaporteUsuario==false){
+							guardarUsuario(nombre, rol, id, password, fech, user);
+						}else{
+							JOptionPane.showMessageDialog(null, "Este pasaporte ya existe en la BD");
+						}
+					}else{
+						JOptionPane.showMessageDialog(null, "El pasaporte debe tener por lo menos 9 digitos");
+					}
 				}
 				if (nombreUsuario.equals("Operador")) {
-					guardarUsuarioSolicitud(nombre, "Cliente", id, password, null, null);
+					if(nombre.equals("")||id.equals("")||password.equals("")){
+						JOptionPane.showMessageDialog(null, "Debe de llenar todos los campos");
+					}else if(id.length()>=9){
+						if(pasaporteUsuario==false){
+							guardarUsuarioSolicitud(nombre, "Cliente", id, password, null, null);
+						}else{
+							JOptionPane.showMessageDialog(null, "Este pasaporte ya existe en la BD");
+						}
+					}else{
+						JOptionPane.showMessageDialog(null, "El pasaporte debe tener por lo menos 9 digitos");
+					}
 				}
 			}
-
 		});
 		cancelar = new JButton("Cancelar");
 		cancelar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogUsuario.dispose();
-
 			}
-
 		});
 		cargaMasiva = new JButton("Carga Masiva");
 		cargaMasiva.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cargaMasiva();
 			}
-
 		});
 		roles.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (roles.getSelectedItem().equals("Cliente")) {
@@ -617,7 +593,6 @@ public class Login {
 					userss.setText("");
 				}
 			}
-
 		});
 		if (nombreUsuario.equals("Administrador")) {
 			label2 = new JLabel("Formulario de Usuarios");
@@ -667,7 +642,6 @@ public class Login {
 		dialogUsuario.setLocationRelativeTo(null);
 
 	}
-
 	public void menuOperador() {
 		JButton registro, ventas, pago, consulta, salir;
 		JDialog dialog = new JDialog();
@@ -682,30 +656,24 @@ public class Login {
 		arriba.add(label2);
 		registro = new JButton("Registro de Usuarios");
 		registro.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				formularioCrearUsuario();
 			}
-
 		});
 		ventas = new JButton("Ventas");
 		ventas.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reme.ventasOperador();
 			}
-
 		});
 		pago = new JButton("Pagos");
 		pago.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reme.cobrarRemesa(nombre);
 			}
-
 		});
 		consulta = new JButton("Consultas");
 		consulta.addActionListener(new ActionListener() {
@@ -713,7 +681,6 @@ public class Login {
 			public void actionPerformed(ActionEvent e) {
 				reme.consultaRemesa();
 			}
-
 		});
 		salir = new JButton("Salir");
 		salir.addActionListener(new ActionListener() {
@@ -721,7 +688,6 @@ public class Login {
 			public void actionPerformed(ActionEvent e) {
 				logaut(dialog);
 			}
-
 		});
 		panelAbajo.setPreferredSize(new Dimension(55, 0));
 		panelIzquierdo.add(registro);
@@ -745,7 +711,6 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
-
 	public void menuCliente() {
 		JButton remesasCobradas, remesasCompradas, salir;
 		JDialog dialog = new JDialog();
@@ -760,22 +725,17 @@ public class Login {
 		arriba.add(label2);
 		remesasCobradas = new JButton("Remesas Cobradas");
 		remesasCobradas.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reme.consultaRemesaClienteCobradas(nombre);
 			}
-
 		});
 		remesasCompradas = new JButton("Remesas Compradas");
 		remesasCompradas.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				reme.consultaRemesaClienteComprada(nombre);
-
 			}
-
 		});
 		salir = new JButton("Logaut");
 		salir.addActionListener(new ActionListener() {
@@ -783,7 +743,6 @@ public class Login {
 			public void actionPerformed(ActionEvent e) {
 				logaut(dialog);
 			}
-
 		});
 		panelAbajo.setPreferredSize(new Dimension(55, 0));
 		panelIzquierdo.add(remesasCobradas);
@@ -805,7 +764,6 @@ public class Login {
 		dialog.setVisible(true);
 		dialog.setLocationRelativeTo(null);
 	}
-
 	public void configuracionDatosRemesas() {
 		JTextField limiteCompras, limitePagos, tipoCambios, porcentajeGanancias;
 		JPanel arriba = new JPanel();
@@ -853,13 +811,10 @@ public class Login {
 		});
 		cancelar = new JButton("Cancelar");
 		cancelar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialogUsuario.dispose();
-
 			}
-
 		});
 		label2 = new JLabel("Configuración de datos");
 		label2.setFont(new Font("Tahoma", 0, 35));
@@ -882,9 +837,7 @@ public class Login {
 		dialogUsuario.setSize(400, 400);
 		dialogUsuario.setVisible(true);
 		dialogUsuario.setLocationRelativeTo(null);
-
 	}
-
 	public void cargaMasiva() {
 		JPanel arriba = new JPanel();
 		try {
@@ -901,7 +854,6 @@ public class Login {
 					String textoMasivo = text.getText();
 					leerLineas(textoMasivo);
 				}
-
 			});
 			dg.add(panel);
 			JLabel label2 = new JLabel("Carga Masiva de Usuarios");
@@ -915,7 +867,6 @@ public class Login {
 			JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña");
 		}
 	}
-
 	static void leerLineas(String superTexto) {
 		String nombre = null, identificador = null, rol = null, contraseña = null, user = null;
 		Date fech = null;
@@ -947,14 +898,20 @@ public class Login {
 						user = Clave_Valor[1];
 						break;
 					}
-
 				}
-
 			}
-			guardarUsuario(nombre, rol, identificador, contraseña, fech, user);
+			boolean verificarPass=verificarUsuario(identificador);
+			if(verificarPass==false){
+				if(identificador.length()>=9){
+					guardarUsuario(nombre, rol, identificador, contraseña, fech, user);
+				}else{
+					JOptionPane.showMessageDialog(null, "El pasaporte debe tener al menos 9 digitos");
+				}
+			}else{
+				JOptionPane.showMessageDialog(null, "Este pasaporte ya existe dentro de la BD");
+			}
 		}
 	}
-
 	static void guardarUsuario(String name, String rol, String id, String password, Date fech, String user) {
 		boolean dos = verificarUse(name, password);
 		if (dos == true) {
@@ -965,7 +922,6 @@ public class Login {
 			cont++;
 		}
 	}
-
 	static void guardarUsuarioSolicitud(String name, String rol, String id, String password, Date fech, String user) {
 		boolean dos = verificarSoli(name, password);
 		if (dos == true) {
@@ -976,7 +932,6 @@ public class Login {
 			cont2++;
 		}
 	}
-
 	static boolean verificarUse(String nombre, String password) {
 		boolean dos = false;
 		for (int i = 0; i < cont; i++) {
@@ -988,7 +943,6 @@ public class Login {
 		}
 		return dos;
 	}
-
 	static boolean verificarUser(String pasaporte, String password) {
 		boolean dos = false;
 		for (int i = 0; i < cont; i++) {
@@ -1000,7 +954,6 @@ public class Login {
 		}
 		return dos;
 	}
-
 	static boolean verificarSoli(String nombre, String password) {
 		boolean dos = false;
 		for (int i = 0; i < cont2; i++) {
@@ -1012,15 +965,12 @@ public class Login {
 		}
 		return dos;
 	}
-
 	public void logaut(JDialog ventana) {
 		ventana.dispose();
 	}
-
 	public boolean login(String password2, String nombre2) {
 		String tipo = tipoUsuario(nombre2, password2);
 		boolean acceso = false;
-
 		try {
 			if (tipo.equals("Administrador")) {
 				for (int i = 0; i < cont; i++) {
@@ -1041,7 +991,6 @@ public class Login {
 		}
 		return acceso;
 	}
-
 	public String tipoUsuario(String nombre, String password) {
 		boolean dos = esEntero(nombre);
 		String rol = null;
@@ -1060,7 +1009,6 @@ public class Login {
 		}
 		return rol;
 	}
-
 	static String retornarNombre(String pasaporte) {
 		String nombre = null;
 		for (int i = 0; i < cont; i++) {
@@ -1070,7 +1018,6 @@ public class Login {
 		}
 		return nombre;
 	}
-
 	public static Date convertirFecha(String fecha) {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 		Date fechaDate = null;
@@ -1081,13 +1028,11 @@ public class Login {
 		}
 		return fechaDate;
 	}
-
 	public void recorrerLista() {
 		for (int i = 0; i < cont; i++) {
 			System.out.println(usuarioList[i].getNombre());
 		}
 	}
-
 	public boolean eliminarUsuarios(int posicion) {
 		boolean result = false;
 		for (int i = 0; i < cont; i++) {
@@ -1102,69 +1047,63 @@ public class Login {
 		cont--;
 		return result;
 	}
-
 	public void recorrerListaDos() {
 		for (int i = 0; i < cont2; i++) {
 			System.out.println(listaSolicitudes[i].getNombre());
 		}
 	}
-
 	public Usuario[] getUsuarioList() {
 
 		return usuarioList;
 	}
-
 	public int getCont() {
 		return cont;
 	}
-
 	public static double getLimiteCompra() {
 		return limiteCompra;
 	}
-
 	public static double setLimiteCompra(double limiteCompra) {
 		Login.limiteCompra = limiteCompra;
 		return Login.limiteCompra;
 	}
-
 	public static double getLimitePago() {
 		return limitePago;
 	}
-
 	public static double setLimitePago(double limitePago) {
 		Login.limitePago = limitePago;
 		return Login.limitePago;
 	}
-
 	public static double getTipoCambio() {
 		return tipoCambio;
 	}
-
 	public static double setTipoCambio(double tipoCambio) {
 		Login.tipoCambio = tipoCambio;
 		return Login.tipoCambio;
 	}
-
 	public static double getPorcentajeCambio() {
 		return porcentajeCambio;
 	}
-
 	public static double setPorcentajeCambio(double porcentajeCambio) {
 		Login.porcentajeCambio = porcentajeCambio;
 		return Login.porcentajeCambio;
 	}
-
 	public static boolean esEntero(String pasaporte) {
-
 		boolean resultado;
-
 		try {
 			Integer.parseInt(pasaporte);
 			resultado = true;
 		} catch (NumberFormatException excepcion) {
 			resultado = false;
 		}
-
 		return resultado;
+	}
+	static boolean verificarUsuario(String pasaporte1){
+		boolean pasaporte=false;
+		for(int i=0;i<cont;i++){
+			if(usuarioList[i].getIdentificador().equals(pasaporte1)){
+				pasaporte = true;
+			}
+		}
+		return pasaporte;
 	}
 }
