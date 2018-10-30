@@ -36,7 +36,6 @@ public class RemesasVista {
 	double limiteCobro = 0.0;
 	double tipoCambio = 0.0;
 	JTextField identificadorRemitente = null, identificadorBeneficiario = null, montoEnviar;
-
 	public void ventasOperador() {
 		cont = lg.getCont();
 		JPanel arriba = new JPanel();
@@ -373,19 +372,21 @@ public class RemesasVista {
 		remesa.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String idRemesa = JOptionPane.showInputDialog(null, "Ingrese el No.Remesa: ",
+				int idReme =0;
+				String idRemesasd = JOptionPane.showInputDialog(null, "Ingrese el No.Remesa: ",
 						JOptionPane.QUESTION_MESSAGE);
 				try{
-					int id = Integer.parseInt(idRemesa);
+					idReme = Integer.parseInt(idRemesasd);
 				}catch(NumberFormatException ex){
 					JOptionPane.showMessageDialog(null, "Ingrese un número válido");
 				}
-				boolean verificarRemesa = verificarIdRemesa(id);
+				boolean verificarRemesa = verificarIdRemesa(idReme);
 				if (verificarRemesa == true) {
-					datosRemesa(id);
+					datosRemesa(idReme);
 				} else {
 					JOptionPane.showMessageDialog(null, "La Remesa No Existe");
 				}
+				System.out.println(verificarRemesa);
 			}
 		});
 		JLabel label2 = new JLabel("Pago de remesas");
@@ -634,13 +635,14 @@ public class RemesasVista {
 		}
 		return suma;
 	}
-	public boolean verificarIdRemesa(int idRemesa) {
+	public boolean verificarIdRemesa(int idRemesass) {
 		boolean verificar = false;
 		for (int i = 0; i < contReme; i++) {
-			if (listaRemesa[i].getId()==idRemesa) {
+			if (listaRemesa[i].getId()==idRemesass) {
 				verificar = true;
 			}
 		}
+		System.out.println(idRemesass);
 		return verificar;
 	}
 	public boolean verificarBeneficiarioRemesa(String idBeneficiario) {

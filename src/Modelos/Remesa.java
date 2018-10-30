@@ -3,7 +3,7 @@ package Modelos;
 import java.util.Date;
 
 public class Remesa {
-	int id;
+	public int id;
 	String remitente;
 	String beneficiario;
 	double montoEnviar=0.0;

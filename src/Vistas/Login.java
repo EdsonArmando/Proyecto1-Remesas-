@@ -1156,10 +1156,10 @@ public class Login {
 		return pasaporte;
 	}
 
-	static boolean verificarNombreUser(String user) {
+	static boolean verificarNombreUser(String userx) {
 		boolean pasaporte = false;
 		for (int i = 0; i < cont; i++) {
-			if (usuarioList[i].getUsername().equals(user)) {
+			if (usuarioList[i].getUsername().equals(userx)) {
 				pasaporte = true;
 			}
 		}
